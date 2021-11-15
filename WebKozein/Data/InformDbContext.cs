@@ -10,6 +10,6 @@ namespace WebKozein.Data
             Database.EnsureCreated();
         }
 
-        DbSet<InformDataBase> InformDataBases { get; set; }
+        public DbSet<InformDataBase> InformDataBases { get; set; }
     }
 }
