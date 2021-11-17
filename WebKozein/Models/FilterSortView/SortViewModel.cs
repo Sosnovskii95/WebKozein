@@ -14,7 +14,7 @@
 
         public SortViewModel(SortState sortOrder)
         {
-            IdSort = SortState.IdAsc;
+            IdSort = sortOrder == SortState.IdAsc ? SortState.IdDesc : SortState.IdAsc;
             NameSort = sortOrder == SortState.NameAsc ? SortState.NameDesc : SortState.NameAsc;
             CostSort = sortOrder == SortState.CostAsc ? SortState.CostDesc : SortState.CostAsc;
             ElectricitySort = sortOrder == SortState.ElectricityAsc ? SortState.ElectricityDesc : SortState.ElectricityAsc;

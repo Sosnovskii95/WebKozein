@@ -17,40 +17,29 @@ namespace WebKozein.Controllers
 
         public async Task<IActionResult> Index(SortState sortOrder, int? fCost, int? fElectricity, int? fPower, int? fPowerTime)
         {
-            ViewData["NameSort"] = sortOrder == SortState.NameAsc ? SortState.NameDesc : SortState.NameAsc;
-            ViewData["CostSort"] = sortOrder == SortState.CostAsc ? SortState.CostDesc : SortState.CostAsc;
-            ViewData["ElectricitySort"] = sortOrder == SortState.ElectricityAsc ? SortState.ElectricityDesc : SortState.ElectricityAsc;
-            ViewData["WaterSort"] = sortOrder == SortState.WaterAsc ? SortState.WaterDesc : SortState.WaterAsc;
-            ViewData["AirSort"] = sortOrder == SortState.AirAsc ? SortState.AirDesc : SortState.AirAsc;
-            ViewData["PowerSort"] = sortOrder == SortState.PowerAsc ? SortState.PowerDesc : SortState.PowerAsc;
-            ViewData["PowerTimeSort"] = sortOrder == SortState.PowerTimeAsc ? SortState.PowerTimeDesc : SortState.PowerTimeAsc;
-
             IQueryable<InformDataBase> dataBases = _context.InformDataBases;
 
             if (fCost.HasValue)
             {
                 dataBases = dataBases.Where(fc => fc.Cost <= fCost);
-                ViewBag.fCost = fCost;
             }
             if (fElectricity.HasValue)
             {
                 dataBases = dataBases.Where(fe => fe.Electricity <= fElectricity);
-                ViewBag.fElectricity = fElectricity;
             }
             if (fPower.HasValue)
             {
                 dataBases = dataBases.Where(fp => fp.Power <= fPower);
-                ViewBag.fPower = fPower;
             }
             if (fPowerTime.HasValue)
             {
                 dataBases = dataBases.Where(fp => fp.PowerTime <= fPowerTime);
-                ViewBag.fPowerTime = fPowerTime;
             }
 
             dataBases = sortOrder switch
             {
                 SortState.IdAsc => dataBases.OrderBy(s => s.Id),
+                SortState.IdDesc => dataBases.OrderByDescending(s => s.Id),
                 SortState.NameAsc => dataBases.OrderBy(s => s.Name),
                 SortState.NameDesc => dataBases.OrderByDescending(s => s.Name),
                 SortState.CostAsc => dataBases.OrderBy(s => s.Cost),
@@ -68,14 +57,14 @@ namespace WebKozein.Controllers
                 _ => dataBases
             };
 
-            /*IndexViewModel viewModel = new IndexViewModel
+            IndexViewModel viewModel = new IndexViewModel
             {
-                InformDataBases = await dataBases.ToListAsync(),
+                InformDataBases = await dataBases.AsNoTracking().ToListAsync(),
                 FilterViewModel = new FilterViewModel(fCost, fElectricity, fPower, fPowerTime),
                 SortViewModel = new SortViewModel(sortOrder)
-            };*/
+            };
 
-            return View(await dataBases.AsNoTracking().ToListAsync());
+            return View(viewModel);
         }
 
         public IActionResult Create()

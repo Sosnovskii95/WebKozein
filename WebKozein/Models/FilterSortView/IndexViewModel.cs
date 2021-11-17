@@ -1,5 +1,4 @@
 ﻿using WebKozein.Models.CodeFirst;
-using WebKozein.Models.FilterSortView;
 
 namespace WebKozein.Models.FilterSortView
 {
