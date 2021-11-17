@@ -7,18 +7,25 @@ namespace WebKozein.Models.CodeFirst
         [Key]
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        [Display(Name = "Название")]
+        public string? Name { get; set; }
 
+        [Display(Name = "Стоимость (руб.)")]
         public int Cost { get; set; }
 
+        [Display(Name = "Электроэнергия (кВт*ч/т)")]
         public int Electricity { get; set; }
 
+        [Display(Name = "Питьевая вода (т.)")]
         public int Water { get; set; }
 
+        [Display(Name = "Сжатый воздух")]
         public bool Air { get; set; }
 
+        [Display(Name = "Мощность")]
         public int Power { get; set; }
 
+        [Display(Name = "Время (ч.)")]
         public int PowerTime { get; set; }
     }
 }

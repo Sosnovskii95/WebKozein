@@ -15,19 +15,38 @@ namespace WebKozein.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(SortState sortOrder = SortState.NameAsc)
+        public async Task<IActionResult> Index(SortState sortOrder)
         {
-            ViewData["NameSort"] = sortOrder== SortState.NameAsc ? SortState.NameDesc: SortState.NameAsc;
+            ViewData["NameSort"] = sortOrder == SortState.NameAsc ? SortState.NameDesc : SortState.NameAsc;
+            ViewData["CostSort"] = sortOrder == SortState.CostAsc ? SortState.CostDesc : SortState.CostAsc;
+            ViewData["ElectricitySort"] = sortOrder == SortState.ElectricityAsc ? SortState.ElectricityDesc : SortState.ElectricityAsc;
+            ViewData["WaterSort"] = sortOrder == SortState.WaterAsc ? SortState.WaterDesc : SortState.WaterAsc;
+            ViewData["AirSort"] = sortOrder == SortState.AirAsc ? SortState.AirDesc : SortState.AirAsc;
+            ViewData["PowerSort"] = sortOrder == SortState.PowerAsc ? SortState.PowerDesc : SortState.PowerAsc;
+            ViewData["PowerTimeSort"] = sortOrder == SortState.PowerTimeAsc ? SortState.PowerTimeDesc : SortState.PowerTimeAsc;
 
             IQueryable<InformDataBase> dataBases = _context.InformDataBases;
 
             dataBases = sortOrder switch
             {
-                SortState.NameAsc => dataBases.OrderBy(s=>s.Name),
+                SortState.NameAsc => dataBases.OrderBy(s => s.Name),
                 SortState.NameDesc => dataBases.OrderByDescending(s => s.Name),
+                SortState.CostAsc => dataBases.OrderBy(s => s.Cost),
+                SortState.CostDesc => dataBases.OrderByDescending(s => s.Cost),
+                SortState.ElectricityAsc => dataBases.OrderBy(s => s.Electricity),
+                SortState.ElectricityDesc => dataBases.OrderByDescending(s => s.Electricity),
+                SortState.WaterAsc => dataBases.OrderBy(s => s.Water),
+                SortState.WaterDesc => dataBases.OrderByDescending(s => s.Water),
+                SortState.AirAsc => dataBases.OrderBy(s => s.Air),
+                SortState.AirDesc => dataBases.OrderByDescending(s => s.Air),
+                SortState.PowerAsc => dataBases.OrderBy(s => s.Power),
+                SortState.PowerDesc => dataBases.OrderByDescending(s => s.Power),
+                SortState.PowerTimeAsc => dataBases.OrderBy(s => s.PowerTime),
+                SortState.PowerTimeDesc => dataBases.OrderByDescending(s => s.PowerTime),
+                _ => dataBases
             };
 
-            return View(await dataBases.ToListAsync());
+            return View(await dataBases.AsNoTracking().ToListAsync());
         }
 
         public IActionResult Create()

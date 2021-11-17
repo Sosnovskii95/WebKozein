@@ -3,6 +3,18 @@
     public enum SortState
     {
         NameAsc,
-        NameDesc
+        NameDesc,
+        CostAsc,
+        CostDesc,
+        ElectricityAsc,
+        ElectricityDesc,
+        WaterAsc,
+        WaterDesc,
+        AirAsc,
+        AirDesc,
+        PowerAsc,
+        PowerDesc,
+        PowerTimeAsc,
+        PowerTimeDesc
     }
 }
