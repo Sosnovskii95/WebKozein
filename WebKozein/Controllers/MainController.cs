@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebKozein.Data;
 using WebKozein.Models.CodeFirst;
-using WebKozein.Models;
+using WebKozein.Models.FilterSortView;
 
 namespace WebKozein.Controllers
 {
@@ -15,7 +15,7 @@ namespace WebKozein.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(SortState sortOrder)
+        public async Task<IActionResult> Index(SortState sortOrder, int? fCost, int? fElectricity, int? fPower, int? fPowerTime)
         {
             ViewData["NameSort"] = sortOrder == SortState.NameAsc ? SortState.NameDesc : SortState.NameAsc;
             ViewData["CostSort"] = sortOrder == SortState.CostAsc ? SortState.CostDesc : SortState.CostAsc;
@@ -27,8 +27,30 @@ namespace WebKozein.Controllers
 
             IQueryable<InformDataBase> dataBases = _context.InformDataBases;
 
+            if (fCost.HasValue)
+            {
+                dataBases = dataBases.Where(fc => fc.Cost <= fCost);
+                ViewBag.fCost = fCost;
+            }
+            if (fElectricity.HasValue)
+            {
+                dataBases = dataBases.Where(fe => fe.Electricity <= fElectricity);
+                ViewBag.fElectricity = fElectricity;
+            }
+            if (fPower.HasValue)
+            {
+                dataBases = dataBases.Where(fp => fp.Power <= fPower);
+                ViewBag.fPower = fPower;
+            }
+            if (fPowerTime.HasValue)
+            {
+                dataBases = dataBases.Where(fp => fp.PowerTime <= fPowerTime);
+                ViewBag.fPowerTime = fPowerTime;
+            }
+
             dataBases = sortOrder switch
             {
+                SortState.IdAsc => dataBases.OrderBy(s => s.Id),
                 SortState.NameAsc => dataBases.OrderBy(s => s.Name),
                 SortState.NameDesc => dataBases.OrderByDescending(s => s.Name),
                 SortState.CostAsc => dataBases.OrderBy(s => s.Cost),
@@ -45,6 +67,13 @@ namespace WebKozein.Controllers
                 SortState.PowerTimeDesc => dataBases.OrderByDescending(s => s.PowerTime),
                 _ => dataBases
             };
+
+            /*IndexViewModel viewModel = new IndexViewModel
+            {
+                InformDataBases = await dataBases.ToListAsync(),
+                FilterViewModel = new FilterViewModel(fCost, fElectricity, fPower, fPowerTime),
+                SortViewModel = new SortViewModel(sortOrder)
+            };*/
 
             return View(await dataBases.AsNoTracking().ToListAsync());
         }

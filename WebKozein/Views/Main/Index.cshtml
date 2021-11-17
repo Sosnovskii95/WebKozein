@@ -10,6 +10,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model=>model.Id)
+            </th>
+            <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSort"]">
                     @Html.DisplayNameFor(model => model.Name)
                 </a>
@@ -48,9 +51,37 @@
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <form asp-action="Index">
+            <td>
+            </td>
+            <td>
+                <input name="fCost" type="number" value="@ViewBag.fCost" />
+            </td>
+            <td>
+                <input name="fElectricity" type="number" value="@ViewBag.fElectricity" />
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+                <input name="fPower" type="number" value="@ViewBag.fPower" />
+            </td>
+            <td>
+                <input name="fPowerTime" type="number" value="@ViewBag.fPowerTime" />
+            </td>
+            <td>
+                <input type="submit" value="Фильтровать" />
+            </td>
+            </form>
+        </tr>
         @foreach (var item in Model)
         {
             <tr>
+                <td>
+                    @Html.DisplayFor(modelitem=>item.Id)
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>

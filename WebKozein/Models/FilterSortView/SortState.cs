@@ -1,7 +1,8 @@
-﻿namespace WebKozein.Models
+﻿namespace WebKozein.Models.FilterSortView
 {
     public enum SortState
     {
+        IdAsc,
         NameAsc,
         NameDesc,
         CostAsc,

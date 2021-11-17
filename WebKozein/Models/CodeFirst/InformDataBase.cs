@@ -5,6 +5,7 @@ namespace WebKozein.Models.CodeFirst
     public class InformDataBase
     {
         [Key]
+        [Display(Name = "Номер")]
         public int Id { get; set; }
 
         [Display(Name = "Название")]
@@ -16,13 +17,13 @@ namespace WebKozein.Models.CodeFirst
         [Display(Name = "Электроэнергия (кВт*ч/т)")]
         public int Electricity { get; set; }
 
-        [Display(Name = "Питьевая вода (т.)")]
+        [Display(Name = "Вода (т)")]
         public int Water { get; set; }
 
-        [Display(Name = "Сжатый воздух")]
+        [Display(Name = "Воздух")]
         public bool Air { get; set; }
 
-        [Display(Name = "Мощность")]
+        [Display(Name = "Кол-во")]
         public int Power { get; set; }
 
         [Display(Name = "Время (ч.)")]
