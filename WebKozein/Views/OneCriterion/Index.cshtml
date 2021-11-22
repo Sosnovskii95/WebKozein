@@ -1,0 +1,158 @@
+﻿@using WebKozein.Models.FilterSortView;
+@using WebKozein.Models.CodeFirst;
+@model IndexViewModel
+@{
+    InformDataBase ModelInfo = new InformDataBase();
+}
+
+@{
+    ViewData["Title"] = "Index";
+}
+<p>
+    <a asp-action="Create">Добавить</a>
+</p>
+
+<form asp-action="Index">
+    <div class="form-inline">
+        <input id="fCost" name="fCost" type="number" value="@Model.FilterViewModel.SelectedCost" placeholder="Стоимость" />
+        <input id="fElectricity" name="fElectricity" type="number" value="@Model.FilterViewModel.SelectedElectricity" placeholder="Электричество" />
+        <input id="fPower" name="fPower" type="number" value="@Model.FilterViewModel.SelectedPower" placeholder="Количество" />
+        <input id="fPowerTime" name="fPowerTime" type="number" value="@Model.FilterViewModel.SelectedPowerTime" placeholder="Время" />
+        @Html.CheckBox("fRule", Model.FilterViewModel.SelectedRule)
+        <label for="fRule">Условие</label>
+        <input type="submit" value="Фильтровать" />
+        <input type="submit" onclick="resetSumbit()" value="Сброс" />
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index"
+                   asp-route-sortOrder="@Model.SortViewModel.IdSort"
+                   asp-route-fCost="@Model.FilterViewModel.SelectedCost"
+                   asp-route-fElectricity="@Model.FilterViewModel.SelectedElectricity"
+                   asp-route-fPower="@Model.FilterViewModel.SelectedPower"
+                   asp-route-fPowerTime="@Model.FilterViewModel.SelectedPowerTime">
+                    @Html.DisplayNameFor(model => ModelInfo.Id)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                   asp-route-sortOrder="@Model.SortViewModel.NameSort"
+                   asp-route-fCost="@Model.FilterViewModel.SelectedCost"
+                   asp-route-fElectricity="@Model.FilterViewModel.SelectedElectricity"
+                   asp-route-fPower="@Model.FilterViewModel.SelectedPower"
+                   asp-route-fPowerTime="@Model.FilterViewModel.SelectedPowerTime">
+                    @Html.DisplayNameFor(model => ModelInfo.Name)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                   asp-route-sortOrder="@Model.SortViewModel.CostSort"
+                   asp-route-fCost="@Model.FilterViewModel.SelectedCost"
+                   asp-route-fElectricity="@Model.FilterViewModel.SelectedElectricity"
+                   asp-route-fPower="@Model.FilterViewModel.SelectedPower"
+                   asp-route-fPowerTime="@Model.FilterViewModel.SelectedPowerTime">
+                    @Html.DisplayNameFor(model => ModelInfo.Cost)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                   asp-route-sortOrder="@Model.SortViewModel.ElectricitySort"
+                   asp-route-fCost="@Model.FilterViewModel.SelectedCost"
+                   asp-route-fElectricity="@Model.FilterViewModel.SelectedElectricity"
+                   asp-route-fPower="@Model.FilterViewModel.SelectedPower"
+                   asp-route-fPowerTime="@Model.FilterViewModel.SelectedPowerTime">
+                    @Html.DisplayNameFor(model => ModelInfo.Electricity)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                   asp-route-sortOrder="@Model.SortViewModel.WaterSort"
+                   asp-route-fCost="@Model.FilterViewModel.SelectedCost"
+                   asp-route-fElectricity="@Model.FilterViewModel.SelectedElectricity"
+                   asp-route-fPower="@Model.FilterViewModel.SelectedPower"
+                   asp-route-fPowerTime="@Model.FilterViewModel.SelectedPowerTime">
+                    @Html.DisplayNameFor(model => ModelInfo.Water)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                   asp-route-sortOrder="@Model.SortViewModel.AirSort"
+                   asp-route-fCost="@Model.FilterViewModel.SelectedCost"
+                   asp-route-fElectricity="@Model.FilterViewModel.SelectedElectricity"
+                   asp-route-fPower="@Model.FilterViewModel.SelectedPower"
+                   asp-route-fPowerTime="@Model.FilterViewModel.SelectedPowerTime">
+                    @Html.DisplayNameFor(model => ModelInfo.Air)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                   asp-route-sortOrder="@Model.SortViewModel.PowerSort"
+                   asp-route-fCost="@Model.FilterViewModel.SelectedCost"
+                   asp-route-fElectricity="@Model.FilterViewModel.SelectedElectricity"
+                   asp-route-fPower="@Model.FilterViewModel.SelectedPower"
+                   asp-route-fPowerTime="@Model.FilterViewModel.SelectedPowerTime">
+                    @Html.DisplayNameFor(model => ModelInfo.Power)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                   asp-route-sortOrder="@Model.SortViewModel.PowerTimeSort"
+                   asp-route-fCost="@Model.FilterViewModel.SelectedCost"
+                   asp-route-fElectricity="@Model.FilterViewModel.SelectedElectricity"
+                   asp-route-fPower="@Model.FilterViewModel.SelectedPower"
+                   asp-route-fPowerTime="@Model.FilterViewModel.SelectedPowerTime">
+                    @Html.DisplayNameFor(model => ModelInfo.PowerTime)
+                </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.InformDataBases)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelitem=>item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cost)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Electricity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Water)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Air)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Power)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PowerTime)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Просмотр</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    function resetSumbit(){
+        document.getElementById("fCost").value = null;
+        document.getElementById("fElectricity").value = null;
+        document.getElementById("fPower").value = null;
+        document.getElementById("fPowerTime").value = null;
+    }
+</script>
