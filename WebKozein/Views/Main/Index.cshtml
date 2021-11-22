@@ -1,10 +1,5 @@
-﻿@using WebKozein.Models.FilterSortView;
-@using WebKozein.Models.CodeFirst;
-@model IndexViewModel
-@{
-    InformDataBase ModelInfo = new InformDataBase();
-}
-
+﻿@using WebKozein.Models;
+@model IEnumerable<IEnumerable<IEnumerable<ConstComboBox>>>
 @{
     ViewData["Title"] = "Index";
 }
@@ -146,11 +141,15 @@
     </tbody>
 </table>
 
-<script type="text/javascript">
-    function resetSumbit(){
-        document.getElementById("fCost").value = null;
-        document.getElementById("fElectricity").value = null;
-        document.getElementById("fPower").value = null;
-        document.getElementById("fPowerTime").value = null;
+@{
+    foreach (var item in Model)
+    {
+        foreach (var items in item)
+        {
+            Html.DropDownList("1", new SelectList(items, "IdConst", "NameConst"));
+        }
     }
-</script>
+}
+
+@Html.DropDownList("combox", new SelectList(ViewBag.combox, "IdConst", "NameConst"))
+

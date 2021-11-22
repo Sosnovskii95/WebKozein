@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebKozein.Data;
+using WebKozein.Models;
 using WebKozein.Models.CodeFirst;
 using WebKozein.Models.FilterSortView;
 
@@ -8,68 +9,20 @@ namespace WebKozein.Controllers
 {
     public class MainController : Controller
     {
-        private readonly InformDbContext _context;
+        private ConstComboBoxViewModel model = new ConstComboBoxViewModel();
 
-        public MainController(InformDbContext context)
+        public IActionResult Index()
         {
-            _context = context;
-        }
-
-        public async Task<IActionResult> Index(SortState sortOrder, int? fCost, int? fElectricity, int? fPower, int? fPowerTime)
-        {
-            IQueryable<InformDataBase> dataBases = _context.InformDataBases;
-
-            if (fCost.HasValue)
+            List<List<List<ConstComboBox>>> test = new List<List<List<ConstComboBox>>>();
+            for(int i=0; i<5; i++)
             {
-                dataBases = dataBases.Where(fc => fc.Cost <= fCost);
+                test[i] = new List<List<ConstComboBox>>(5);
+                for(int j=0;j<5; j++)
+                {
+                    test[i][j] = model.getConstComboBoxes();
+                }
             }
-            if (fElectricity.HasValue)
-            {
-                dataBases = dataBases.Where(fe => fe.Electricity <= fElectricity);
-            }
-            if (fPower.HasValue)
-            {
-                dataBases = dataBases.Where(fp => fp.Power <= fPower);
-            }
-            if (fPowerTime.HasValue)
-            {
-                dataBases = dataBases.Where(fp => fp.PowerTime <= fPowerTime);
-            }
-
-            dataBases = sortOrder switch
-            {
-                SortState.IdAsc => dataBases.OrderBy(s => s.Id),
-                SortState.IdDesc => dataBases.OrderByDescending(s => s.Id),
-                SortState.NameAsc => dataBases.OrderBy(s => s.Name),
-                SortState.NameDesc => dataBases.OrderByDescending(s => s.Name),
-                SortState.CostAsc => dataBases.OrderBy(s => s.Cost),
-                SortState.CostDesc => dataBases.OrderByDescending(s => s.Cost),
-                SortState.ElectricityAsc => dataBases.OrderBy(s => s.Electricity),
-                SortState.ElectricityDesc => dataBases.OrderByDescending(s => s.Electricity),
-                SortState.WaterAsc => dataBases.OrderBy(s => s.Water),
-                SortState.WaterDesc => dataBases.OrderByDescending(s => s.Water),
-                SortState.AirAsc => dataBases.OrderBy(s => s.Air),
-                SortState.AirDesc => dataBases.OrderByDescending(s => s.Air),
-                SortState.PowerAsc => dataBases.OrderBy(s => s.Power),
-                SortState.PowerDesc => dataBases.OrderByDescending(s => s.Power),
-                SortState.PowerTimeAsc => dataBases.OrderBy(s => s.PowerTime),
-                SortState.PowerTimeDesc => dataBases.OrderByDescending(s => s.PowerTime),
-                _ => dataBases
-            };
-
-            IndexViewModel viewModel = new IndexViewModel
-            {
-                InformDataBases = await dataBases.AsNoTracking().ToListAsync(),
-                FilterViewModel = new FilterViewModel(fCost, fElectricity, fPower, fPowerTime),
-                SortViewModel = new SortViewModel(sortOrder)
-            };
-
-            return View(viewModel);
-        }
-
-        public IActionResult Create()
-        {
-            return View();
+            return View(test);
         }
 
         [HttpPost]
