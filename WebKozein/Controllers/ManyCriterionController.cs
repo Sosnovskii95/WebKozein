@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebKozein.Data;
 using WebKozein.Models.CodeFirst;
+using WebKozein.Models.ComboBox;
 using WebKozein.Models.FilterSortView;
 
 namespace WebKozein.Controllers
@@ -9,6 +10,7 @@ namespace WebKozein.Controllers
     public class ManyCriterionController : Controller
     {
         private readonly InformDbContext _context;
+        private readonly UtilConstComboBox utilConstComboBox = new UtilConstComboBox();
 
         public ManyCriterionController(InformDbContext context)
         {
@@ -57,9 +59,12 @@ namespace WebKozein.Controllers
                 _ => dataBases
             };
 
+            ViewBag.constCombo = utilConstComboBox.getConstComboBoxes();
+
             IndexViewModel viewModel = new IndexViewModel
             {
                 InformDataBases = await dataBases.AsNoTracking().ToListAsync(),
+                TableComboBoxes = await _context.TableComboBoxes.ToListAsync(),
                 FilterViewModel = new FilterViewModel(fCost, fElectricity, fPower, fPowerTime, false),
                 SortViewModel = new SortViewModel(sortOrder)
             };
