@@ -7,7 +7,12 @@
         public List<ConstComboBox> getConstComboBoxes()
         {
             return constComboBoxList;
-        }      
+        }
+        
+        public double getValueId(int idConst)
+        {
+            return constComboBoxList.FirstOrDefault(f => f.IdConst == idConst).ValueConst;
+        }
 
         public UtilConstComboBox()
         {

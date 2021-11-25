@@ -49,5 +49,27 @@
             }
             return tableComboBoxList;
         }
+
+        public List<TableComboBox> getListByIdList(List<int> Id, List<int> BoxCostIdConst,
+            List<int> BoxElectricityIdConst, List<int> BoxPowerIdConst, List<int> BoxWaterIdConst,
+            List<int> BoxAirIdConst)
+        {
+            List<TableComboBox> tableComboBoxes = new List<TableComboBox>();
+
+            for (int i = 0; i < Id.Count; i++)
+            {
+                tableComboBoxes.Add(new TableComboBox
+                {
+                    Id = Id[i],
+                    BoxAirIdConst = BoxAirIdConst[i],
+                    BoxCostIdConst = BoxCostIdConst[i],
+                    BoxElectricityIdConst = BoxElectricityIdConst[i],
+                    BoxPowerIdConst = BoxPowerIdConst[i],
+                    BoxWaterIdConst = BoxWaterIdConst[i]
+                });
+            }
+
+            return tableComboBoxes;
+        }
     }
 }

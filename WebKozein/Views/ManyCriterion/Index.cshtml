@@ -10,178 +10,185 @@
 @{
     ViewData["Title"] = "Index";
 }
-<div class="accordion" id="accordionExample">
-    <div class="card">
-        <div class="card-header" id="heading">
-            <h5 class="mb-0">
-                <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                    Button with data-bs-target
-                </button>
-            </h5>
-        </div>
-        <div class="collapse" id="collapseExample">
-            <div class="card-body">
-                <form asp-action="Index" method="post">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>
-                                    @Html.DisplayNameFor(model => comboBox.BoxCostIdConst)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => comboBox.BoxElectricityIdConst)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => comboBox.BoxPowerIdConst)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => comboBox.BoxWaterIdConst)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => comboBox.BoxAirIdConst)
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @{
-                                int i = 0;
-                                foreach (var item in Model.TableComboBoxes.Take(5))
-                                {
-                                    <tr>
-                                        @switch (i)
-                                        {
-                                            case 0:
-                                                <td>
-                                                    @Html.DisplayNameFor(model => comboBox.BoxCostIdConst)
-                                                </td>
-                                                break;
-                                            case 1:
-                                                <td>
-                                                    @Html.DisplayNameFor(model => comboBox.BoxElectricityIdConst)
-                                                </td>
-                                                break;
-                                            case 2:
-                                                <td>
-                                                    @Html.DisplayNameFor(model => comboBox.BoxPowerIdConst)
-                                                </td>
-                                                break;
-                                            case 3:
-                                                <td>
-                                                    @Html.DisplayNameFor(model => comboBox.BoxWaterIdConst)
-                                                </td>
-                                                break;
-                                            case 4:
-                                                <td>
-                                                    @Html.DisplayNameFor(model => comboBox.BoxAirIdConst)
-                                                </td>
-                                                break;
+<div class="container">
+    <div class="accordion" id="accordionExample">
+        <div class="card">
+            <div class="card-header" id="heading">
+                <h5 class="mb-0">
+                    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                        Button with data-bs-target
+                    </button>
+                </h5>
+            </div>
+            <div class="collapse" id="collapseExample">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <form asp-action="UpdateTableComboBox" method="post">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => comboBox.BoxCostIdConst)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => comboBox.BoxElectricityIdConst)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => comboBox.BoxPowerIdConst)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => comboBox.BoxWaterIdConst)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => comboBox.BoxAirIdConst)
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            int i = 0;
+                                            foreach (var item in Model.TableComboBoxes.Take(5))
+                                            {
+                                                <tr>
+                                                    @switch (i)
+                                                    {
+                                                        case 0:
+                                                            <td>
+                                                                @Html.DisplayNameFor(model => comboBox.BoxCostIdConst)
+                                                            </td>
+                                                            break;
+                                                        case 1:
+                                                            <td>
+                                                                @Html.DisplayNameFor(model => comboBox.BoxElectricityIdConst)
+                                                            </td>
+                                                            break;
+                                                        case 2:
+                                                            <td>
+                                                                @Html.DisplayNameFor(model => comboBox.BoxPowerIdConst)
+                                                            </td>
+                                                            break;
+                                                        case 3:
+                                                            <td>
+                                                                @Html.DisplayNameFor(model => comboBox.BoxWaterIdConst)
+                                                            </td>
+                                                            break;
+                                                        case 4:
+                                                            <td>
+                                                                @Html.DisplayNameFor(model => comboBox.BoxAirIdConst)
+                                                            </td>
+                                                            break;
+                                                    }
+                                                    @Html.Hidden("Id", item.Id)
+                                                    <td>
+                                                        @Html.DropDownList("BoxCostIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxCostIdConst))
+                                                    </td>
+                                                    <td>
+                                                        @Html.DropDownList("BoxElectricityIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxElectricityIdConst))
+                                                    </td>
+                                                    <td>
+                                                        @Html.DropDownList("BoxPowerIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxPowerIdConst))
+                                                    </td>
+                                                    <td>
+                                                        @Html.DropDownList("BoxWaterIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxWaterIdConst))
+                                                    </td>
+                                                    <td>
+                                                        @Html.DropDownList("BoxAirIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxAirIdConst))
+                                                    </td>
+                                                </tr>
+                                                i++;
+                                            }
                                         }
-                                        @Html.Hidden("Id", item.Id)
-                                        <td>
-                                            @Html.DropDownList("BoxCostIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxCostIdConst))
-                                        </td>
-                                        <td>
-                                            @Html.DropDownList("BoxElectricityIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxElectricityIdConst))
-                                        </td>
-                                        <td>
-                                            @Html.DropDownList("BoxPowerIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxPowerIdConst))
-                                        </td>
-                                        <td>
-                                            @Html.DropDownList("BoxWaterIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxWaterIdConst))
-                                        </td>
-                                        <td>
-                                            @Html.DropDownList("BoxAirIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxAirIdConst))
-                                        </td>
-                                    </tr>
-                                    i++;
-                                }
-                            }
-                        </tbody>
-                    </table>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>
-                                    @Html.DisplayNameFor(model => comboBox.BoxCostIdConst)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => comboBox.BoxElectricityIdConst)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => comboBox.BoxPowerIdConst)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => comboBox.BoxWaterIdConst)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => comboBox.BoxAirIdConst)
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @{
-                                i = 0;
-                                foreach (var item in Model.TableComboBoxes.Skip(5))
-                                {
-                                    <tr>
-                                        @switch (i)
-                                        {
-                                            case 0:
-                                                <td>
-                                                    @Html.DisplayNameFor(model => comboBox.BoxCostIdConst)
-                                                </td>
-                                                break;
-                                            case 1:
-                                                <td>
-                                                    @Html.DisplayNameFor(model => comboBox.BoxElectricityIdConst)
-                                                </td>
-                                                break;
-                                            case 2:
-                                                <td>
-                                                    @Html.DisplayNameFor(model => comboBox.BoxPowerIdConst)
-                                                </td>
-                                                break;
-                                            case 3:
-                                                <td>
-                                                    @Html.DisplayNameFor(model => comboBox.BoxWaterIdConst)
-                                                </td>
-                                                break;
-                                            case 4:
-                                                <td>
-                                                    @Html.DisplayNameFor(model => comboBox.BoxAirIdConst)
-                                                </td>
-                                                break;
+                                    </tbody>
+                                </table>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => comboBox.BoxCostIdConst)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => comboBox.BoxElectricityIdConst)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => comboBox.BoxPowerIdConst)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => comboBox.BoxWaterIdConst)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => comboBox.BoxAirIdConst)
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            i = 0;
+                                            foreach (var item in Model.TableComboBoxes.Skip(5))
+                                            {
+                                                <tr>
+                                                    @switch (i)
+                                                    {
+                                                        case 0:
+                                                            <td>
+                                                                @Html.DisplayNameFor(model => comboBox.BoxCostIdConst)
+                                                            </td>
+                                                            break;
+                                                        case 1:
+                                                            <td>
+                                                                @Html.DisplayNameFor(model => comboBox.BoxElectricityIdConst)
+                                                            </td>
+                                                            break;
+                                                        case 2:
+                                                            <td>
+                                                                @Html.DisplayNameFor(model => comboBox.BoxPowerIdConst)
+                                                            </td>
+                                                            break;
+                                                        case 3:
+                                                            <td>
+                                                                @Html.DisplayNameFor(model => comboBox.BoxWaterIdConst)
+                                                            </td>
+                                                            break;
+                                                        case 4:
+                                                            <td>
+                                                                @Html.DisplayNameFor(model => comboBox.BoxAirIdConst)
+                                                            </td>
+                                                            break;
+                                                    }
+                                                    @Html.Hidden("Id", item.Id)
+                                                    <td>
+                                                        @Html.DropDownList("BoxCostIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxCostIdConst))
+                                                    </td>
+                                                    <td>
+                                                        @Html.DropDownList("BoxElectricityIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxElectricityIdConst))
+                                                    </td>
+                                                    <td>
+                                                        @Html.DropDownList("BoxPowerIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxPowerIdConst))
+                                                    </td>
+                                                    <td>
+                                                        @Html.DropDownList("BoxWaterIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxWaterIdConst))
+                                                    </td>
+                                                    <td>
+                                                        @Html.DropDownList("BoxAirIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxAirIdConst))
+                                                    </td>
+                                                </tr>
+                                                i++;
+                                            }
                                         }
-                                        @Html.Hidden("Id", item.Id)
-                                        <td>
-                                            @Html.DropDownList("BoxCostIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxCostIdConst))
-                                        </td>
-                                        <td>
-                                            @Html.DropDownList("BoxElectricityIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxElectricityIdConst))
-                                        </td>
-                                        <td>
-                                            @Html.DropDownList("BoxPowerIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxPowerIdConst))
-                                        </td>
-                                        <td>
-                                            @Html.DropDownList("BoxWaterIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxWaterIdConst))
-                                        </td>
-                                        <td>
-                                            @Html.DropDownList("BoxAirIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxAirIdConst))
-                                        </td>
-                                    </tr>
-                                    i++;
-                                }
-                            }
-                        </tbody>
-                    </table>
-
-                    <input type="submit" />
-                </form>
+                                    </tbody>
+                                </table>
+                                <input type="submit" value="Сохранить изменения" />
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        kjj
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
 </div>
 

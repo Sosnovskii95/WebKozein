@@ -11,6 +11,7 @@ namespace WebKozein.Controllers
     {
         private readonly InformDbContext _context;
         private readonly UtilConstComboBox utilConstComboBox = new UtilConstComboBox();
+        private readonly UtilTableComboBox utilTableComboBox = new UtilTableComboBox();
 
         public ManyCriterionController(InformDbContext context)
         {
@@ -131,6 +132,18 @@ namespace WebKozein.Controllers
             }
 
             return null;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateTableComboBox(List<int> Id, List<int> BoxCostIdConst,
+            List<int> BoxElectricityIdConst, List<int> BoxPowerIdConst, List<int> BoxWaterIdConst,
+            List<int> BoxAirIdConst)
+        {
+            _context.TableComboBoxes.UpdateRange(utilTableComboBox.getListByIdList(Id, BoxCostIdConst,
+                BoxElectricityIdConst, BoxPowerIdConst, BoxWaterIdConst, BoxAirIdConst));
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
