@@ -71,5 +71,46 @@
 
             return tableComboBoxes;
         }
+
+        public double[,] getMatrixFromList(int itemMatrix, List<TableComboBox> tableComboBoxList)
+        {
+            TableComboBox[] tableComboBoxes;
+
+            if (itemMatrix == 1)
+            {
+                tableComboBoxes = tableComboBoxList.Take(5).ToArray();
+            }
+            else
+            {
+                tableComboBoxes = tableComboBoxList.Skip(5).ToArray();
+            }
+
+
+            double[,] matrix = new double[5, 5];
+
+            for (int i = 0; i < tableComboBoxes.Length; i++)
+            {
+                for (int j = 0; j < tableComboBoxes.Length; j++)
+                {
+                    matrix[i, j] = getValueIdComboBox(tableComboBoxes[i], j);
+                }
+            }
+
+            return matrix;
+        }
+
+        private double getValueIdComboBox(TableComboBox comboBox, int postion)
+        {
+            UtilConstComboBox utilConstComboBox = new UtilConstComboBox();
+            switch (postion)
+            {
+                case 0: return (utilConstComboBox.getValueId(comboBox.BoxCostIdConst));
+                case 1: return (utilConstComboBox.getValueId(comboBox.BoxPowerIdConst));
+                case 2: return (utilConstComboBox.getValueId(comboBox.BoxPowerIdConst));
+                case 3: return (utilConstComboBox.getValueId(comboBox.BoxWaterIdConst));
+                case 4: return (utilConstComboBox.getValueId(comboBox.BoxAirIdConst));
+                default: return 0;
+            }
+        }
     }
 }
