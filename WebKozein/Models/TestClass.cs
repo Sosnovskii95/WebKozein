@@ -7,15 +7,29 @@ namespace WebKozein.Models
     {
         private List<TableComboBox> tableComboBoxList = new List<TableComboBox>();
         private UtilTableComboBox utilTableComboBox = new UtilTableComboBox();
+        private double[] mainAl;
 
         public TestClass(List<TableComboBox> tableComboBoxes)
         {
             tableComboBoxList = tableComboBoxes;
+            getBestWeight();
         }
 
-        public void getBestWeight()
+        public double[] getMainAl()
         {
-            double[] priceAl1 = getPriceAlternative(utilTableComboBox.getMatrixFromList(1, tableComboBoxList)); 
+            double[] mainAltemp = new double[mainAl.Length + 1];
+            for (int i = 0; i < mainAl.Length; i++)
+            {
+                mainAltemp[i] = Math.Round(mainAl[i], 2);
+            }
+            mainAltemp[mainAl.Length] = Math.Round(mainAl[getBestWeight()], 2);
+
+            return mainAltemp;
+        }
+
+        public int getBestWeight()
+        {
+            double[] priceAl1 = getPriceAlternative(utilTableComboBox.getMatrixFromList(1, tableComboBoxList));
             double[] priceAl2 = getPriceAlternative(utilTableComboBox.getMatrixFromList(2, tableComboBoxList));
 
             double sumAl1 = GetSummaPriceAlternative(priceAl1);
@@ -24,10 +38,10 @@ namespace WebKozein.Models
             double[] weightAl1 = GetWeight(priceAl1, sumAl1);
             double[] weightAl2 = GetWeight(priceAl2, sumAl2);
 
-            double[] mainAl = GetMainAlternative(weightAl1, weightAl2);
+            mainAl = GetMainAlternative(weightAl1, weightAl2);
 
             int index = GetIndesBestWeigth(mainAl);
-            double best = mainAl[index];
+            return index;
             //MessageBox.Show("Лучший критерий - это" + GetNameAlternative(index) + "Вес критерия равен " + Math.Round(best, 2) + ".");
         }
 

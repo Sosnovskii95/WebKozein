@@ -12,5 +12,7 @@ namespace WebKozein.Models.FilterSortView
         public FilterViewModel FilterViewModel { get; set; }
 
         public SortViewModel SortViewModel { get; set; }
+
+        public WeightModel WeightModel { get; set; }
     }
 }

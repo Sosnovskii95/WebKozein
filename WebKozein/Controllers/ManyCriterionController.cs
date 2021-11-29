@@ -4,6 +4,7 @@ using WebKozein.Data;
 using WebKozein.Models.CodeFirst;
 using WebKozein.Models.ComboBox;
 using WebKozein.Models.FilterSortView;
+using WebKozein.Models;
 
 namespace WebKozein.Controllers
 {
@@ -61,13 +62,24 @@ namespace WebKozein.Controllers
             };
 
             ViewBag.constCombo = utilConstComboBox.getConstComboBoxes();
+            TestClass testClass = new TestClass(await _context.TableComboBoxes.ToListAsync());
 
             IndexViewModel viewModel = new IndexViewModel
             {
                 InformDataBases = await dataBases.AsNoTracking().ToListAsync(),
                 TableComboBoxes = await _context.TableComboBoxes.ToListAsync(),
                 FilterViewModel = new FilterViewModel(fCost, fElectricity, fPower, fPowerTime, false),
-                SortViewModel = new SortViewModel(sortOrder)
+                SortViewModel = new SortViewModel(sortOrder),
+                WeightModel = new WeightModel
+                {
+                    CostWeight = testClass.getMainAl()[0],
+                    ElectricityWeight = testClass.getMainAl()[1],
+                    PowerWeight = testClass.getMainAl()[2],
+                    WaterWeight = testClass.getMainAl()[3],
+                    AirWeignt = testClass.getMainAl()[4],
+                    BestCriteria = testClass.getMainAl()[5],
+                    NameBestCriteria = ""
+                }
             };
 
             return View(viewModel);
