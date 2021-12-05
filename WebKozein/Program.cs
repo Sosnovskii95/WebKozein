@@ -6,6 +6,15 @@ var builder = WebApplication.CreateBuilder(args);
 string connectionString = builder.Configuration.GetConnectionString("InformDataBaseConnection");
 builder.Services.AddDbContext<InformDbContext>(options => options.UseSqlServer(connectionString));
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromSeconds(600);
+    options.Cookie.Name = "MyApp.Session";
+    options.Cookie.IsEssential = true;
+    options.Cookie.HttpOnly = true;
+});
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -21,6 +30,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseSession();
 
 app.UseRouting();
 

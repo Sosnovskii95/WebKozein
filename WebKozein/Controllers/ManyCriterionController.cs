@@ -4,7 +4,10 @@ using WebKozein.Data;
 using WebKozein.Models.CodeFirst;
 using WebKozein.Models.ComboBox;
 using WebKozein.Models.FilterSortView;
-using WebKozein.Models;
+using WebKozein.Models.Weight;
+using WebKozein.Models.Pareto;
+using Microsoft.AspNetCore.Http;
+using WebKozein.Models.Serialization;
 
 namespace WebKozein.Controllers
 {
@@ -37,7 +40,7 @@ namespace WebKozein.Controllers
             }
             if (fPowerTime.HasValue)
             {
-                dataBases = dataBases.Where(fp => fp.PowerTime >= fPowerTime);
+                dataBases = dataBases.Where(fp => fp.PowerTime <= fPowerTime);
             }
 
             dataBases = sortOrder switch
@@ -62,27 +65,85 @@ namespace WebKozein.Controllers
             };
 
             ViewBag.constCombo = utilConstComboBox.getConstComboBoxes();
-            TestClass testClass = new TestClass(await _context.TableComboBoxes.ToListAsync());
+            WeightAlternativ weightAlternativ = new WeightAlternativ(await _context.TableComboBoxes.ToListAsync());
+
+            List<InformDataBase> list;
+
+            if (GetListPareto().Count > 0 && GetOperation()==2)
+            {
+                list = GetListPareto();
+            }
+            else
+            {
+                list = await dataBases.AsNoTracking().ToListAsync();
+                SetListPareto(list);
+                SetOperation(1);
+            }
 
             IndexViewModel viewModel = new IndexViewModel
             {
-                InformDataBases = await dataBases.AsNoTracking().ToListAsync(),
+                InformDataBases = list,
                 TableComboBoxes = await _context.TableComboBoxes.ToListAsync(),
                 FilterViewModel = new FilterViewModel(fCost, fElectricity, fPower, fPowerTime, false),
                 SortViewModel = new SortViewModel(sortOrder),
                 WeightModel = new WeightModel
                 {
-                    CostWeight = testClass.getMainAl()[0],
-                    ElectricityWeight = testClass.getMainAl()[1],
-                    PowerWeight = testClass.getMainAl()[2],
-                    WaterWeight = testClass.getMainAl()[3],
-                    AirWeignt = testClass.getMainAl()[4],
-                    BestCriteria = testClass.getMainAl()[5],
-                    NameBestCriteria = ""
+                    CostWeight = weightAlternativ.GetMassAlternativ()[0],
+                    ElectricityWeight = weightAlternativ.GetMassAlternativ()[1],
+                    PowerWeight = weightAlternativ.GetMassAlternativ()[2],
+                    WaterWeight = weightAlternativ.GetMassAlternativ()[3],
+                    AirWeignt = weightAlternativ.GetMassAlternativ()[4],
+                    BestCriteria = weightAlternativ.GetMassAlternativ()[5],
+                    NameBestCriteria = GetNameBestCriteria(weightAlternativ.GetIndexBestAlternativ())
                 }
             };
 
             return View(viewModel);
+        }
+
+        private List<InformDataBase> GetListPareto()
+        {
+            List<InformDataBase> list = HttpContext.Session.Get<List<InformDataBase>>("Pareto");
+            if(list == null)
+            {
+                list = new List<InformDataBase>();
+            }
+            return list;
+        }
+
+        private void SetListPareto(List<InformDataBase> list)
+        {
+            HttpContext.Session.Set<List<InformDataBase>>("Pareto", list);
+        }
+
+        private int GetOperation()
+        {
+            int? operation = HttpContext.Session.Get<int>("Operation");
+            if (!operation.HasValue)
+            {
+                operation = 0;
+            }
+            return operation.Value;
+        }
+
+        private void SetOperation(int operation)
+        {
+            HttpContext.Session.Set<int>("Operation", operation);
+        }
+
+        private string GetNameBestCriteria(int index)
+        {
+            string name = "";
+            switch (index)
+            {
+                case 0: name = "Цена"; break;
+                case 1: name = "Электричество"; break;
+                case 2: name = "Мощность"; break;
+                case 3: name = "Вода"; break;
+                case 4: name = "Воздух"; break;
+                default: break;
+            }
+            return name;
         }
 
         public IActionResult Create()
@@ -155,6 +216,23 @@ namespace WebKozein.Controllers
                 BoxElectricityIdConst, BoxPowerIdConst, BoxWaterIdConst, BoxAirIdConst));
             await _context.SaveChangesAsync();
 
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Pareto()
+        {
+            List<InformDataBase> list = GetListPareto();
+
+            if (GetOperation() == 1)
+            {
+                if (list.Count > 0)
+                {
+                    Pareto pareto = new Pareto();
+                    list = pareto.ParetoSort(list);
+                    SetListPareto(list);
+                    SetOperation(2);
+                }
+            }
             return RedirectToAction(nameof(Index));
         }
     }

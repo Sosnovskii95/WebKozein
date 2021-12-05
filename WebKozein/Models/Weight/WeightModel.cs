@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebKozein.Models
+namespace WebKozein.Models.Weight
 {
     public class WeightModel
     {

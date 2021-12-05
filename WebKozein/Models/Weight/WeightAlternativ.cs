@@ -1,33 +1,46 @@
 ﻿using WebKozein.Data;
 using WebKozein.Models.ComboBox;
 
-namespace WebKozein.Models
+namespace WebKozein.Models.Weight
 {
-    public class TestClass
+    public class WeightAlternativ
     {
         private List<TableComboBox> tableComboBoxList = new List<TableComboBox>();
         private UtilTableComboBox utilTableComboBox = new UtilTableComboBox();
-        private double[] mainAl;
+        private double[] massAlternativ;
+        private int indexBestAlternativ;
 
-        public TestClass(List<TableComboBox> tableComboBoxes)
+        public WeightAlternativ(List<TableComboBox> tableComboBoxes)
         {
             tableComboBoxList = tableComboBoxes;
-            getBestWeight();
+            if (tableComboBoxList.Count > 0)
+            {
+                GetBestWeight();
+            }
+            else
+            {
+                massAlternativ = new double[6];
+            }
         }
 
-        public double[] getMainAl()
+        public int GetIndexBestAlternativ()
         {
-            double[] mainAltemp = new double[mainAl.Length + 1];
-            for (int i = 0; i < mainAl.Length; i++)
+            return indexBestAlternativ;
+        }
+
+        public double[] GetMassAlternativ()
+        {
+            double[] mainAltemp = new double[massAlternativ.Length + 1];
+            for (int i = 0; i < massAlternativ.Length; i++)
             {
-                mainAltemp[i] = Math.Round(mainAl[i], 2);
+                mainAltemp[i] = Math.Round(massAlternativ[i], 2);
             }
-            mainAltemp[mainAl.Length] = Math.Round(mainAl[getBestWeight()], 2);
+            mainAltemp[massAlternativ.Length] = Math.Round(massAlternativ[indexBestAlternativ], 2);
 
             return mainAltemp;
         }
 
-        public int getBestWeight()
+        private void GetBestWeight()
         {
             double[] priceAl1 = getPriceAlternative(utilTableComboBox.getMatrixFromList(1, tableComboBoxList));
             double[] priceAl2 = getPriceAlternative(utilTableComboBox.getMatrixFromList(2, tableComboBoxList));
@@ -38,11 +51,9 @@ namespace WebKozein.Models
             double[] weightAl1 = GetWeight(priceAl1, sumAl1);
             double[] weightAl2 = GetWeight(priceAl2, sumAl2);
 
-            mainAl = GetMainAlternative(weightAl1, weightAl2);
+            massAlternativ = GetMainAlternative(weightAl1, weightAl2);
 
-            int index = GetIndesBestWeigth(mainAl);
-            return index;
-            //MessageBox.Show("Лучший критерий - это" + GetNameAlternative(index) + "Вес критерия равен " + Math.Round(best, 2) + ".");
+            indexBestAlternativ = GetIndesBestWeigth(massAlternativ);
         }
 
         private double[] getPriceAlternative(double[,] dataValue)

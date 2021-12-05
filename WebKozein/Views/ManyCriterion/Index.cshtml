@@ -1,12 +1,10 @@
 ﻿@using WebKozein.Models.FilterSortView;
 @using WebKozein.Models.CodeFirst;
 @using WebKozein.Models.ComboBox;
-@using WebKozein.Models;
 @model IndexViewModel
 @{
     InformDataBase ModelInfo = new InformDataBase();
     TableComboBox comboBox = new TableComboBox();
-    WeightModel weightModel = Model.WeightModel;
 }
 
 @{
@@ -18,7 +16,7 @@
             <div class="card-header" id="heading">
                 <h5 class="mb-0">
                     <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                        Button with data-bs-target
+                        Веса
                     </button>
                 </h5>
             </div>
@@ -183,6 +181,9 @@
                                 </table>
                                 <input type="submit" value="Сохранить изменения" />
                             </form>
+                            <form asp-action="Pareto">
+                                <input type="submit" value="Парето" />
+                            </form>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -190,32 +191,32 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        @Html.DisplayNameFor(model=>weightModel.CostWeight) = @Html.DisplayFor(model=>Model.WeightModel.CostWeight)
+                                        @Html.DisplayNameFor(model=>Model.WeightModel.CostWeight) = @Html.DisplayFor(model=>Model.WeightModel.CostWeight)
                                     </th>
                                 </tr>
                                 <tr>
                                     <th>
-                                        @Html.DisplayNameFor(model=>weightModel.ElectricityWeight) = @Html.DisplayFor(model=>Model.WeightModel.ElectricityWeight)
+                                        @Html.DisplayNameFor(model=>Model.WeightModel.ElectricityWeight) = @Html.DisplayFor(model=>Model.WeightModel.ElectricityWeight)
                                     </th>
                                 </tr>
                                 <tr>
                                     <th>
-                                        @Html.DisplayNameFor(model=>weightModel.PowerWeight) = @Html.DisplayFor(model=>Model.WeightModel.PowerWeight)
+                                        @Html.DisplayNameFor(model=>Model.WeightModel.PowerWeight) = @Html.DisplayFor(model=>Model.WeightModel.PowerWeight)
                                     </th>
                                 </tr>
                                 <tr>
                                     <th>
-                                        @Html.DisplayNameFor(model=>weightModel.WaterWeight) = @Html.DisplayFor(model=>Model.WeightModel.WaterWeight)
+                                        @Html.DisplayNameFor(model=>Model.WeightModel.WaterWeight) = @Html.DisplayFor(model=>Model.WeightModel.WaterWeight)
                                     </th>
                                 </tr>
                                 <tr>
                                     <th>
-                                        @Html.DisplayNameFor(model=>weightModel.AirWeignt) = @Html.DisplayFor(model=>Model.WeightModel.AirWeignt)
+                                        @Html.DisplayNameFor(model=>Model.WeightModel.AirWeignt) = @Html.DisplayFor(model=>Model.WeightModel.AirWeignt)
                                     </th>
                                 </tr>
                                 <tr>
                                     <th>
-                                        @Html.DisplayNameFor(model=>weightModel.BestCriteria) - @Html.DisplayFor(model=>Model.WeightModel.NameBestCriteria) = = @Html.DisplayFor(model=>Model.WeightModel.BestCriteria)
+                                        @Html.DisplayNameFor(model=>Model.WeightModel.BestCriteria) - @Html.DisplayFor(model=>Model.WeightModel.NameBestCriteria) = = @Html.DisplayFor(model=>Model.WeightModel.BestCriteria)
                                     </th>
                                 </tr>
                             </thead>
