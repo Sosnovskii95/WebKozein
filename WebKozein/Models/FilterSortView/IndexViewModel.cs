@@ -1,5 +1,6 @@
 ﻿using WebKozein.Models.CodeFirst;
 using WebKozein.Models.ComboBox;
+using WebKozein.Models.Weight;
 
 namespace WebKozein.Models.FilterSortView
 {

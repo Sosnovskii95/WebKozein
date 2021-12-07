@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WebKozein.Data;
-using WebKozein.Models.ComboBox;
+using WebKozein.Models.Hierarchy;
 
 namespace WebKozein.Controllers
 {
@@ -9,6 +7,8 @@ namespace WebKozein.Controllers
     {
         public IActionResult Index()
         {
+            HierarchyMethod hierarchyMethod = new HierarchyMethod();
+            hierarchyMethod.genereta();
             return View();
         }
     }
