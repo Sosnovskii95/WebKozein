@@ -28,5 +28,8 @@ namespace WebKozein.Models.CodeFirst
 
         [Display(Name = "Время (ч.)")]
         public int PowerTime { get; set; }
+
+        [Display(Name = "Вес в %")]
+        public double Weight { get; set; }
     }
 }

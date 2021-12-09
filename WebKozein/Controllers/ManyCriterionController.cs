@@ -6,6 +6,7 @@ using WebKozein.Models.ComboBox;
 using WebKozein.Models.FilterSortView;
 using WebKozein.Models.Weight;
 using WebKozein.Models.Pareto;
+using WebKozein.Models.Hierarchy;
 using Microsoft.AspNetCore.Http;
 using WebKozein.Models.Serialization;
 
@@ -69,7 +70,7 @@ namespace WebKozein.Controllers
 
             List<InformDataBase> list;
 
-            if (GetListPareto().Count > 0 && GetOperation()==2)
+            if (GetListPareto().Count > 0 && GetOperation() == 2 || GetOperation() == 3)
             {
                 list = GetListPareto();
             }
@@ -77,6 +78,7 @@ namespace WebKozein.Controllers
             {
                 list = await dataBases.AsNoTracking().ToListAsync();
                 SetListPareto(list);
+                SetMassAlternativ(weightAlternativ.GetMassAlternativ());
                 SetOperation(1);
             }
 
@@ -93,7 +95,7 @@ namespace WebKozein.Controllers
                     PowerWeight = weightAlternativ.GetMassAlternativ()[2],
                     WaterWeight = weightAlternativ.GetMassAlternativ()[3],
                     AirWeignt = weightAlternativ.GetMassAlternativ()[4],
-                    BestCriteria = weightAlternativ.GetMassAlternativ()[5],
+                    BestCriteria = weightAlternativ.GetMassAlternativ()[weightAlternativ.GetIndexBestAlternativ()],
                     NameBestCriteria = GetNameBestCriteria(weightAlternativ.GetIndexBestAlternativ())
                 }
             };
@@ -101,10 +103,21 @@ namespace WebKozein.Controllers
             return View(viewModel);
         }
 
+        private double[] GetMassMainAlternativ()
+        {
+            double[] mass = HttpContext.Session.Get<double[]>("mass");
+            return mass;
+        }
+
+        private void SetMassAlternativ(double[] massAlternativ)
+        {
+            HttpContext.Session.Set<double[]>("mass", massAlternativ);
+        }
+
         private List<InformDataBase> GetListPareto()
         {
             List<InformDataBase> list = HttpContext.Session.Get<List<InformDataBase>>("Pareto");
-            if(list == null)
+            if (list == null)
             {
                 list = new List<InformDataBase>();
             }
@@ -155,7 +168,7 @@ namespace WebKozein.Controllers
 
         public async Task<IActionResult> Create(InformDataBase data)
         {
-
+            data.Weight = 0;
             await _context.InformDataBases.AddAsync(data);
             await _context.SaveChangesAsync();
 
@@ -175,6 +188,7 @@ namespace WebKozein.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(InformDataBase data)
         {
+            data.Weight = 0;
             _context.InformDataBases.Update(data);
             await _context.SaveChangesAsync();
 
@@ -231,6 +245,21 @@ namespace WebKozein.Controllers
                     list = pareto.ParetoSort(list);
                     SetListPareto(list);
                     SetOperation(2);
+                }
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Hierarchy()
+        {
+            List<InformDataBase> list = GetListPareto();
+            if (GetOperation() == 2)
+            {
+                if (list.Count > 0)
+                {
+                    HierarchyMethod Hierarchy = new HierarchyMethod(list, GetMassMainAlternativ());
+                    SetListPareto(Hierarchy.GetInformDataBases());
+                    SetOperation(3);
                 }
             }
             return RedirectToAction(nameof(Index));

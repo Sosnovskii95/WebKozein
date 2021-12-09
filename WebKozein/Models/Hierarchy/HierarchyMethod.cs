@@ -1,67 +1,108 @@
 ﻿using WebKozein.Models.CodeFirst;
+using WebKozein.Models.Alternativ;
 
 
 namespace WebKozein.Models.Hierarchy
 {
-    public class HierarchyMethod
+    public class HierarchyMethod : AlternativMethod
     {
-        public void genereta()
-        {
-            List<InformDataBase> informs = new List<InformDataBase>() {
-                new InformDataBase { Cost=1, Air=true, Electricity=1, Name="1", Id=1, Power=1, PowerTime=1,Water=1},
-            new InformDataBase { Cost=2, Air=false, Electricity=2, Name="2", Id=2, Power=2, PowerTime=2,Water=2}
-            };
-            List<List<double>> vs = new List<List<double>>(informs.Count);
-            for (int i = 0; i < informs.Count; i++)
-            {
-                vs.Add(new List<double>());
-                vs[i].Add(informs[i].Cost);
-                vs[i].Add(informs[i].Electricity);
-                vs[i].Add(informs[i].Power);
-                vs[i].Add(informs[i].Water);
-                vs[i].Add(Convert.ToDouble(informs[i].Air));
-            }
-            outf(vs);
-            List<double[]> t = new List<double[]>();
-            for (int i = 0; i < vs[0].Count; i++)
-            {
-                t.Add(new double[vs.Count]);
-                for (int j = 0; j < vs.Count; j++)
-                {
-                    t[i][j] = vs[j][i];
-                }
+        private List<InformDataBase> _informsList;
+        private double[] _mainMassAlternativ;
+        private List<double[]> listMasParametres = new List<double[]>();
 
-            }
-            outf(t);
+        private double[] weightAlternativs;
+        private int indexBestAlternativ;
+
+        public int GetIndexBestAlternativ()
+        {
+            return indexBestAlternativ;
         }
 
-        private void outf(List<List<double>> vs)
+        public List<InformDataBase> GetInformDataBases()
         {
-            for (int i = 0; vs.Count > i; i++)
+            return _informsList;
+        }
+
+        public HierarchyMethod(List<InformDataBase> informDataBases, double[] mainMassAlternativ)
+        {
+            _informsList = informDataBases;
+            _mainMassAlternativ = mainMassAlternativ;
+            if (_informsList.Count > 0)
             {
-                for (int j = 0; vs[i].Count > j; j++)
-                {
-                    System.Diagnostics.Debug.Write(vs[i][j] + " ");
-                }
-                System.Diagnostics.Debug.WriteLine("");
+                GetBestAlternativ();
             }
         }
 
-        private void outf(List<double[]> vs)
+        private void GetBestAlternativ()
         {
-            for (int i = 0; vs.Count > i; i++)
+            if (_informsList.Count > 0)
             {
-                for (int j = 0; j < vs[i].Length; j++)
+                ConvertListParametresToListMas();
+                bool[] status = new bool[5] { true, true, false, true, true };
+
+                List<double[,]> pricesList = new List<double[,]>();
+                for (int i = 0; i < listMasParametres.Count; i++)
                 {
-                    System.Diagnostics.Debug.Write(vs[i][j] + " ");
+                    pricesList.Add(CreateMatrixPrices(listMasParametres[i], status[i]));
                 }
-                System.Diagnostics.Debug.WriteLine("");
+
+                List<double[]> pricesAlternativ = new List<double[]>();
+                foreach (var item in pricesList)
+                {
+                    pricesAlternativ.Add(GetPriceAlternative(item));
+                }
+
+                List<double> sumAlternativ = new List<double>();
+                foreach (var item in pricesAlternativ)
+                {
+                    sumAlternativ.Add(GetSummaPriceAlternative(item));
+                }
+
+                List<double[]> weightAlternativ = new List<double[]>();
+                for (int i = 0; i < sumAlternativ.Count; i++)
+                {
+                    weightAlternativ.Add(GetWeight(pricesAlternativ[i], sumAlternativ[i]));
+                }
+
+                double[,] b = CreateMatrixWeight(weightAlternativ);
+                weightAlternativs = Stolb(b, _mainMassAlternativ);
+                indexBestAlternativ = GetIndexBestWeigth(weightAlternativs);
+
+                for (int i = 0; i < _informsList.Count; i++)
+                {
+                    _informsList[i].Weight = Math.Round(weightAlternativs[i], 2) * 100;
+                }
             }
         }
 
-        private float[,] CreateMatrixPrices(float[] values, bool status)
+        private void ConvertListParametresToListMas()
         {
-            float[,] matrix = new float[values.Length, values.Length];
+            List<List<double>> masListParametres = new List<List<double>>();
+            for (int i = 0; i < _informsList.Count; i++)
+            {
+                masListParametres.Add(new List<double>());
+                masListParametres[i].Add(_informsList[i].Cost);
+                masListParametres[i].Add(_informsList[i].Electricity);
+                masListParametres[i].Add(_informsList[i].Power);
+                masListParametres[i].Add(_informsList[i].Water);
+                masListParametres[i].Add(Convert.ToDouble(_informsList[i].Air) + 1);
+            }
+
+            listMasParametres = new List<double[]>();
+            for (int i = 0; i < masListParametres[0].Count; i++)
+            {
+                listMasParametres.Add(new double[masListParametres.Count]);
+                for (int j = 0; j < masListParametres.Count; j++)
+                {
+                    listMasParametres[i][j] = masListParametres[j][i];
+                }
+
+            }
+        }
+
+        private double[,] CreateMatrixPrices(double[] values, bool status)
+        {
+            double[,] matrix = new double[values.Length, values.Length];
             for (int i = 0; i < values.Length - 1; i++)
             {
                 for (int j = i + 1; j < values.Length; j++)
@@ -82,6 +123,29 @@ namespace WebKozein.Models.Hierarchy
             {
                 matrix[i, i] = 1;
             }
+            return matrix;
+        }
+
+        private double[] Stolb(double[,] A, double[] B)
+        {
+            double[] res = new double[A.GetLength(1)];
+            for (int row = 0; row < A.GetLength(0); row++)
+            {
+                for (int col = 0; col < A.GetLength(1); col++)
+                {
+                    res[col] += A[row, col] * B[row];
+                }
+            }
+            return res;
+        }
+        private double[,] CreateMatrixWeight(List<double[]> weightsAlternatives)
+        {
+            double[,] matrix = new double[weightsAlternatives.Count, weightsAlternatives[0].Length];
+            for (int i = 0; i < weightsAlternatives.Count; i++)
+                for (int j = 0; j < weightsAlternatives[0].Length; j++)
+                {
+                    matrix[i, j] = weightsAlternatives[i][j];
+                }
             return matrix;
         }
     }

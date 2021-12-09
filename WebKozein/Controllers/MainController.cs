@@ -7,8 +7,6 @@ namespace WebKozein.Controllers
     {
         public IActionResult Index()
         {
-            HierarchyMethod hierarchyMethod = new HierarchyMethod();
-            hierarchyMethod.genereta();
             return View();
         }
     }
