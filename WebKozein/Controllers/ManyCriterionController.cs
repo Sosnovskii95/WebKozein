@@ -68,7 +68,7 @@ namespace WebKozein.Controllers
             ViewBag.constCombo = utilConstComboBox.getConstComboBoxes();
             WeightAlternativ weightAlternativ = new WeightAlternativ(await _context.TableComboBoxes.ToListAsync());
 
-            List<InformDataBase> list;
+            /*List<InformDataBase> list;
 
             if (GetListPareto().Count > 0 && GetOperation() == 2 || GetOperation() == 3)
             {
@@ -80,11 +80,11 @@ namespace WebKozein.Controllers
                 SetListPareto(list);
                 SetMassAlternativ(weightAlternativ.GetMassAlternativ());
                 SetOperation(1);
-            }
+            }*/
 
             IndexViewModel viewModel = new IndexViewModel
             {
-                InformDataBases = list,
+                InformDataBases = await dataBases.AsNoTracking().ToListAsync(),
                 TableComboBoxes = await _context.TableComboBoxes.ToListAsync(),
                 FilterViewModel = new FilterViewModel(fCost, fElectricity, fPower, fPowerTime, false),
                 SortViewModel = new SortViewModel(sortOrder),
@@ -168,11 +168,18 @@ namespace WebKozein.Controllers
 
         public async Task<IActionResult> Create(InformDataBase data)
         {
-            data.Weight = 0;
-            await _context.InformDataBases.AddAsync(data);
-            await _context.SaveChangesAsync();
+            if (ModelState.IsValid)
+            {
+                data.Weight = 0;
+                await _context.InformDataBases.AddAsync(data);
+                await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return View(data);
+            }
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -181,18 +188,27 @@ namespace WebKozein.Controllers
             {
                 return View(await _context.InformDataBases.FindAsync(id.Value));
             }
-
-            return null;
+            else
+            {
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(InformDataBase data)
         {
-            data.Weight = 0;
-            _context.InformDataBases.Update(data);
-            await _context.SaveChangesAsync();
+            if (ModelState.IsValid)
+            {
+                data.Weight = 0;
+                _context.InformDataBases.Update(data);
+                await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -201,8 +217,10 @@ namespace WebKozein.Controllers
             {
                 return View(await _context.InformDataBases.FindAsync(id.Value));
             }
-
-            return null;
+            else
+            {
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -217,8 +235,7 @@ namespace WebKozein.Controllers
                     return RedirectToAction(nameof(Index));
                 }
             }
-
-            return null;
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]

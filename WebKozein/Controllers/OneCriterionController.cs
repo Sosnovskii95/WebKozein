@@ -84,11 +84,16 @@ namespace WebKozein.Controllers
 
         public async Task<IActionResult> Create(InformDataBase data)
         {
-
-            await _context.InformDataBases.AddAsync(data);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction(nameof(Index));
+            if (ModelState.IsValid)
+            {
+                await _context.InformDataBases.AddAsync(data);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return View(data);
+            }
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -104,10 +109,17 @@ namespace WebKozein.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(InformDataBase data)
         {
-            _context.InformDataBases.Update(data);
-            await _context.SaveChangesAsync();
+            if (ModelState.IsValid)
+            {
+                _context.InformDataBases.Update(data);
+                await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return View(data);
+            }
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -116,8 +128,10 @@ namespace WebKozein.Controllers
             {
                 return View(await _context.InformDataBases.FindAsync(id.Value));
             }
-
-            return null;
+            else
+            {
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -133,7 +147,7 @@ namespace WebKozein.Controllers
                 }
             }
 
-            return null;
+            return RedirectToAction(nameof(Index));
         }
     }
 }
