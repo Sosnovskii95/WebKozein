@@ -23,25 +23,54 @@ namespace WebKozein.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(SortState sortOrder, int? fCost, int? fElectricity, int? fPower, int? fPowerTime)
+        public async Task<IActionResult> Index(SortState sortOrder, int? fCost, int? fElectricity, int? fPower, int? fPowerTime, bool? flagPareto, bool? flagHeararchy)
         {
             IQueryable<InformDataBase> dataBases = _context.InformDataBases;
+            bool flagFind = true;
 
             if (fCost.HasValue)
             {
                 dataBases = dataBases.Where(fc => fc.Cost <= fCost);
             }
+            else
+            {
+                flagFind = false;
+            }
             if (fElectricity.HasValue)
             {
                 dataBases = dataBases.Where(fe => fe.Electricity <= fElectricity);
+            }
+            else
+            {
+                flagFind = false;
             }
             if (fPower.HasValue)
             {
                 dataBases = dataBases.Where(fp => fp.Power <= fPower);
             }
+            else
+            {
+                flagFind = false;
+            }
             if (fPowerTime.HasValue)
             {
                 dataBases = dataBases.Where(fp => fp.PowerTime <= fPowerTime);
+            }
+            else
+            {
+                flagFind = false;
+            }
+
+            ViewData["flagSearch"] = flagFind;
+
+            if (flagPareto.HasValue)
+            {
+                ViewBag.Weight = flagPareto.Value;
+                ViewData["flagPareto"] = flagPareto.Value;
+            }
+            if (flagHeararchy.HasValue)
+            {
+                ViewBag.Pareto = flagHeararchy.Value;
             }
 
             dataBases = sortOrder switch
@@ -65,58 +94,42 @@ namespace WebKozein.Controllers
                 _ => dataBases
             };
 
-            ViewBag.constCombo = utilConstComboBox.getConstComboBoxes();
-            WeightAlternativ weightAlternativ = new WeightAlternativ(await _context.TableComboBoxes.ToListAsync());
+            List<InformDataBase> list;
 
-            /*List<InformDataBase> list;
-
-            if (GetListPareto().Count > 0 && GetOperation() == 2 || GetOperation() == 3)
+            if (GetList().Count > 0)
             {
-                list = GetListPareto();
+                list = GetList();
             }
             else
             {
                 list = await dataBases.AsNoTracking().ToListAsync();
-                SetListPareto(list);
-                SetMassAlternativ(weightAlternativ.GetMassAlternativ());
-                SetOperation(1);
-            }*/
+                SetList(list);
+            }
 
             IndexViewModel viewModel = new IndexViewModel
             {
-                InformDataBases = await dataBases.AsNoTracking().ToListAsync(),
-                TableComboBoxes = await _context.TableComboBoxes.ToListAsync(),
+                InformDataBases = list,
                 FilterViewModel = new FilterViewModel(fCost, fElectricity, fPower, fPowerTime, false),
                 SortViewModel = new SortViewModel(sortOrder),
-                WeightModel = new WeightModel
-                {
-                    CostWeight = weightAlternativ.GetMassAlternativ()[0],
-                    ElectricityWeight = weightAlternativ.GetMassAlternativ()[1],
-                    PowerWeight = weightAlternativ.GetMassAlternativ()[2],
-                    WaterWeight = weightAlternativ.GetMassAlternativ()[3],
-                    AirWeignt = weightAlternativ.GetMassAlternativ()[4],
-                    BestCriteria = weightAlternativ.GetMassAlternativ()[weightAlternativ.GetIndexBestAlternativ()],
-                    NameBestCriteria = GetNameBestCriteria(weightAlternativ.GetIndexBestAlternativ())
-                }
             };
 
             return View(viewModel);
         }
 
-        private double[] GetMassMainAlternativ()
+        private double[] GetMass()
         {
-            double[] mass = HttpContext.Session.Get<double[]>("mass");
+            double[] mass = HttpContext.Session.Get<double[]>("Mass");
             return mass;
         }
 
-        private void SetMassAlternativ(double[] massAlternativ)
+        private void SetMass(double[] massAlternativ)
         {
-            HttpContext.Session.Set<double[]>("mass", massAlternativ);
+            HttpContext.Session.Set<double[]>("Mass", massAlternativ);
         }
 
-        private List<InformDataBase> GetListPareto()
+        private List<InformDataBase> GetList()
         {
-            List<InformDataBase> list = HttpContext.Session.Get<List<InformDataBase>>("Pareto");
+            List<InformDataBase> list = HttpContext.Session.Get<List<InformDataBase>>("List");
             if (list == null)
             {
                 list = new List<InformDataBase>();
@@ -124,24 +137,9 @@ namespace WebKozein.Controllers
             return list;
         }
 
-        private void SetListPareto(List<InformDataBase> list)
+        private void SetList(List<InformDataBase> list)
         {
-            HttpContext.Session.Set<List<InformDataBase>>("Pareto", list);
-        }
-
-        private int GetOperation()
-        {
-            int? operation = HttpContext.Session.Get<int>("Operation");
-            if (!operation.HasValue)
-            {
-                operation = 0;
-            }
-            return operation.Value;
-        }
-
-        private void SetOperation(int operation)
-        {
-            HttpContext.Session.Set<int>("Operation", operation);
+            HttpContext.Session.Set<List<InformDataBase>>("List", list);
         }
 
         private string GetNameBestCriteria(int index)
@@ -247,39 +245,86 @@ namespace WebKozein.Controllers
                 BoxElectricityIdConst, BoxPowerIdConst, BoxWaterIdConst, BoxAirIdConst));
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Weight));
         }
 
-        public IActionResult Pareto()
+        public IActionResult Pareto(string? flagSearch,int? fCost, int? fElectricity, int? fPower, int? fPowerTime)
         {
-            List<InformDataBase> list = GetListPareto();
-
-            if (GetOperation() == 1)
+            bool flag = Convert.ToBoolean(flagSearch);
+            if (flag)
             {
+                List<InformDataBase> list = GetList();
+
                 if (list.Count > 0)
                 {
                     Pareto pareto = new Pareto();
                     list = pareto.ParetoSort(list);
-                    SetListPareto(list);
-                    SetOperation(2);
+                    SetList(list);
                 }
+
+                return RedirectToAction(nameof(Index), new { fCost = fCost, fElectricity = fElectricity, fPower = fPower, fPowerTime = fPowerTime, flagPareto = flag });
             }
+            else
+            {
+                return RedirectToAction(nameof(Index), new { fCost = fCost, fElectricity = fElectricity, fPower = fPower, fPowerTime = fPowerTime, flagPareto = flag });
+            }
+        }
+
+        public IActionResult Hierarchy(string? flagPareto, int? fCost, int? fElectricity, int? fPower, int? fPowerTime)
+        {
+            bool flag = Convert.ToBoolean(flagPareto);
+
+            if (flag)
+            {
+                List<InformDataBase> list = GetList();
+                double[] mass = GetMass();
+
+                bool flagList = GetList().Count > 0;
+                bool flagMass = GetMass().Length > 0;
+
+                if (list.Count > 0 && mass != null)
+                {
+                    HierarchyMethod Hierarchy = new HierarchyMethod(list, mass);
+                    list = Hierarchy.GetInformDataBases();
+                    SetList(list);
+                }
+                return RedirectToAction(nameof(Index), new { fCost = fCost, fElectricity = fElectricity, fPower = fPower, fPowerTime = fPowerTime, flagHeararchy = flag });
+            }
+            else
+            {
+                return RedirectToAction(nameof(Index), new { fCost = fCost, fElectricity = fElectricity, fPower = fPower, fPowerTime = fPowerTime, flagHeararchy = flag });
+            }
+        }
+
+        public IActionResult Reset()
+        {
+            SetList(new List<InformDataBase>());
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Hierarchy()
+        public async Task<IActionResult> Weight()
         {
-            List<InformDataBase> list = GetListPareto();
-            if (GetOperation() == 2)
+            ViewBag.constCombo = utilConstComboBox.getConstComboBoxes();
+            WeightAlternativ weightAlternativ = new WeightAlternativ(await _context.TableComboBoxes.ToListAsync());
+
+            WeightViewModel weightViewModel = new WeightViewModel
             {
-                if (list.Count > 0)
+                TableComboBoxes = await _context.TableComboBoxes.ToListAsync(),
+                WeightModel = new WeightModel
                 {
-                    HierarchyMethod Hierarchy = new HierarchyMethod(list, GetMassMainAlternativ());
-                    SetListPareto(Hierarchy.GetInformDataBases());
-                    SetOperation(3);
+                    CostWeight = weightAlternativ.GetMassAlternativ()[0],
+                    ElectricityWeight = weightAlternativ.GetMassAlternativ()[1],
+                    PowerWeight = weightAlternativ.GetMassAlternativ()[2],
+                    WaterWeight = weightAlternativ.GetMassAlternativ()[3],
+                    AirWeignt = weightAlternativ.GetMassAlternativ()[4],
+                    BestCriteria = weightAlternativ.GetMassAlternativ()[weightAlternativ.GetIndexBestAlternativ()],
+                    NameBestCriteria = GetNameBestCriteria(weightAlternativ.GetIndexBestAlternativ())
                 }
-            }
-            return RedirectToAction(nameof(Index));
+            };
+
+            SetMass(weightAlternativ.GetMassAlternativ());
+
+            return View(weightViewModel);
         }
     }
 }

@@ -10,231 +10,28 @@
 @{
     ViewData["Title"] = "Index";
 }
-<div class="container">
-    <div class="accordion" id="accordionExample">
-        <div class="card">
-            <div class="card-header" id="heading">
-                <h5 class="mb-0">
-                    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                        Веса
-                    </button>
-                </h5>
-            </div>
-            <div class="collapse" id="collapseExample">
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <form asp-action="UpdateTableComboBox" method="post">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => comboBox.BoxCostIdConst)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => comboBox.BoxElectricityIdConst)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => comboBox.BoxPowerIdConst)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => comboBox.BoxWaterIdConst)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => comboBox.BoxAirIdConst)
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @{
-                                            int i = 0;
-                                            foreach (var item in Model.TableComboBoxes.Take(5))
-                                            {
-                                                <tr>
-                                                    @switch (i)
-                                                    {
-                                                        case 0:
-                                                            <td>
-                                                                @Html.DisplayNameFor(model => comboBox.BoxCostIdConst)
-                                                            </td>
-                                                            break;
-                                                        case 1:
-                                                            <td>
-                                                                @Html.DisplayNameFor(model => comboBox.BoxElectricityIdConst)
-                                                            </td>
-                                                            break;
-                                                        case 2:
-                                                            <td>
-                                                                @Html.DisplayNameFor(model => comboBox.BoxPowerIdConst)
-                                                            </td>
-                                                            break;
-                                                        case 3:
-                                                            <td>
-                                                                @Html.DisplayNameFor(model => comboBox.BoxWaterIdConst)
-                                                            </td>
-                                                            break;
-                                                        case 4:
-                                                            <td>
-                                                                @Html.DisplayNameFor(model => comboBox.BoxAirIdConst)
-                                                            </td>
-                                                            break;
-                                                    }
-                                                    @Html.Hidden("Id", item.Id)
-                                                    <td>
-                                                        @Html.DropDownList("BoxCostIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxCostIdConst))
-                                                    </td>
-                                                    <td>
-                                                        @Html.DropDownList("BoxElectricityIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxElectricityIdConst))
-                                                    </td>
-                                                    <td>
-                                                        @Html.DropDownList("BoxPowerIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxPowerIdConst))
-                                                    </td>
-                                                    <td>
-                                                        @Html.DropDownList("BoxWaterIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxWaterIdConst))
-                                                    </td>
-                                                    <td>
-                                                        @Html.DropDownList("BoxAirIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxAirIdConst))
-                                                    </td>
-                                                </tr>
-                                                i++;
-                                            }
-                                        }
-                                    </tbody>
-                                </table>
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => comboBox.BoxCostIdConst)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => comboBox.BoxElectricityIdConst)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => comboBox.BoxPowerIdConst)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => comboBox.BoxWaterIdConst)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => comboBox.BoxAirIdConst)
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @{
-                                            i = 0;
-                                            foreach (var item in Model.TableComboBoxes.Skip(5))
-                                            {
-                                                <tr>
-                                                    @switch (i)
-                                                    {
-                                                        case 0:
-                                                            <td>
-                                                                @Html.DisplayNameFor(model => comboBox.BoxCostIdConst)
-                                                            </td>
-                                                            break;
-                                                        case 1:
-                                                            <td>
-                                                                @Html.DisplayNameFor(model => comboBox.BoxElectricityIdConst)
-                                                            </td>
-                                                            break;
-                                                        case 2:
-                                                            <td>
-                                                                @Html.DisplayNameFor(model => comboBox.BoxPowerIdConst)
-                                                            </td>
-                                                            break;
-                                                        case 3:
-                                                            <td>
-                                                                @Html.DisplayNameFor(model => comboBox.BoxWaterIdConst)
-                                                            </td>
-                                                            break;
-                                                        case 4:
-                                                            <td>
-                                                                @Html.DisplayNameFor(model => comboBox.BoxAirIdConst)
-                                                            </td>
-                                                            break;
-                                                    }
-                                                    @Html.Hidden("Id", item.Id)
-                                                    <td>
-                                                        @Html.DropDownList("BoxCostIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxCostIdConst))
-                                                    </td>
-                                                    <td>
-                                                        @Html.DropDownList("BoxElectricityIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxElectricityIdConst))
-                                                    </td>
-                                                    <td>
-                                                        @Html.DropDownList("BoxPowerIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxPowerIdConst))
-                                                    </td>
-                                                    <td>
-                                                        @Html.DropDownList("BoxWaterIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxWaterIdConst))
-                                                    </td>
-                                                    <td>
-                                                        @Html.DropDownList("BoxAirIdConst", new SelectList(ViewBag.constCombo, "IdConst", "NameConst", item.BoxAirIdConst))
-                                                    </td>
-                                                </tr>
-                                                i++;
-                                            }
-                                        }
-                                    </tbody>
-                                </table>
-                                <input type="submit" value="Сохранить изменения" />
-                            </form>
-                            <form asp-action="Pareto">
-                                <input type="submit" value="Парето" />
-                            </form>
-                            <form asp-action="Hierarchy">
-                                <input type="submit" value="Метод иерархий" />
-                            </form>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        @Html.DisplayNameFor(model=>Model.WeightModel.CostWeight) = @Html.DisplayFor(model=>Model.WeightModel.CostWeight)
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        @Html.DisplayNameFor(model=>Model.WeightModel.ElectricityWeight) = @Html.DisplayFor(model=>Model.WeightModel.ElectricityWeight)
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        @Html.DisplayNameFor(model=>Model.WeightModel.PowerWeight) = @Html.DisplayFor(model=>Model.WeightModel.PowerWeight)
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        @Html.DisplayNameFor(model=>Model.WeightModel.WaterWeight) = @Html.DisplayFor(model=>Model.WeightModel.WaterWeight)
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        @Html.DisplayNameFor(model=>Model.WeightModel.AirWeignt) = @Html.DisplayFor(model=>Model.WeightModel.AirWeignt)
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        @Html.DisplayNameFor(model=>Model.WeightModel.BestCriteria) - @Html.DisplayFor(model=>Model.WeightModel.NameBestCriteria) = = @Html.DisplayFor(model=>Model.WeightModel.BestCriteria)
-                                    </th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
 <p>
     <a asp-action="Create">Добавить</a>
 </p>
+<a asp-action="Weight">Расчет весов</a>
+
+<form asp-action="Pareto" asp-route-sortOrder="@Model.SortViewModel.IdSort"
+                   asp-route-fCost="@Model.FilterViewModel.SelectedCost"
+                   asp-route-fElectricity="@Model.FilterViewModel.SelectedElectricity"
+                   asp-route-fPower="@Model.FilterViewModel.SelectedPower"
+                   asp-route-fPowerTime="@Model.FilterViewModel.SelectedPowerTime" asp-route-flagSearch="@ViewData["flagSearch"]">
+    <input type="submit" value="Парето" />
+</form>
+<form asp-action="Hierarchy" asp-route-sortOrder="@Model.SortViewModel.IdSort"
+                   asp-route-fCost="@Model.FilterViewModel.SelectedCost"
+                   asp-route-fElectricity="@Model.FilterViewModel.SelectedElectricity"
+                   asp-route-fPower="@Model.FilterViewModel.SelectedPower"
+                   asp-route-fPowerTime="@Model.FilterViewModel.SelectedPowerTime" asp-route-flagSearch="@ViewData["flagPareto"]">
+    <input type="submit" value="Метод иерархий" />
+</form>
+<form asp-action="Reset">
+    <input type="submit" value="Сброс решения" />
+</form>
 
 <form asp-action="Index">
     <div class="form-inline">
@@ -382,6 +179,15 @@
         }
     </tbody>
 </table>
+
+@if (ViewBag.Weight == false)
+{
+    <script type="text/javascript">alert("Не произведен отбор по условиям")</script>
+}
+@if (ViewBag.Pareto == false)
+{
+    <script type="text/javascript">alert("Не произведен отбор методом Парето")</script>
+}
 
 <script type="text/javascript">
     function resetSumbit(){

@@ -15,7 +15,6 @@ namespace WebKozein.Controllers
             _context = context;
         }
 
-
         public async Task<IActionResult> Index(SortState sortOrder, int? fCost, int? fElectricity, int? fPower, int? fPowerTime, bool fRule)
         {
             IQueryable<InformDataBase> dataBases = _context.InformDataBases;
@@ -86,6 +85,7 @@ namespace WebKozein.Controllers
         {
             if (ModelState.IsValid)
             {
+                data.Weight = 0;
                 await _context.InformDataBases.AddAsync(data);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -103,7 +103,7 @@ namespace WebKozein.Controllers
                 return View(await _context.InformDataBases.FindAsync(id.Value));
             }
 
-            return null;
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
@@ -111,6 +111,7 @@ namespace WebKozein.Controllers
         {
             if (ModelState.IsValid)
             {
+                data.Weight = 0;
                 _context.InformDataBases.Update(data);
                 await _context.SaveChangesAsync();
 

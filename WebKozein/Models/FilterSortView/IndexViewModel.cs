@@ -8,12 +8,8 @@ namespace WebKozein.Models.FilterSortView
     {
         public IEnumerable<InformDataBase> InformDataBases { get; set; }
 
-        public IEnumerable<TableComboBox> TableComboBoxes { get; set; }
-
         public FilterViewModel FilterViewModel { get; set; }
 
         public SortViewModel SortViewModel { get; set; }
-
-        public WeightModel WeightModel { get; set; }
     }
 }
