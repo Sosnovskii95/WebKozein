@@ -29,16 +29,16 @@ namespace WebKozein.Controllers
             }
             if (fPower.HasValue)
             {
-                dataBases = dataBases.Where(fp => fp.Power <= fPower);
+                dataBases = dataBases.Where(fp => fp.Power >= fPower);
             }
             if (fPowerTime.HasValue)
             {
-                dataBases = dataBases.Where(fp => fp.PowerTime >= fPowerTime);
+                dataBases = dataBases.Where(fp => fp.PowerTime <= fPowerTime);
             }
 
             if (fRule)
             {
-                dataBases = dataBases.OrderByDescending(s => s.Electricity);
+                dataBases = dataBases.OrderBy(s => s.Electricity);
             }
             else
             {

@@ -10,7 +10,11 @@
     ViewData["Title"] = "Weight";
 }
 
-<a asp-action="Index">Вернуться назад</a> 
+<div class="row">
+    <div class="col">
+        <a asp-action="Index" role="button" class="btn btn-outline-secondary">Вернуться назад</a> 
+    </div>
+</div>
 
 <div class="row">
     <div class="col-md-8">
@@ -170,7 +174,7 @@
                         }
                     </tbody>
                 </table>
-                <input type="submit" value="Сохранить изменения" />
+                <input type="submit" value="Сохранить изменения" class="btn btn-primary"/>
             </form>
         </div>
     </div>

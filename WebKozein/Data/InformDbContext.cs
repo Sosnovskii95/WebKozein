@@ -27,10 +27,13 @@ namespace WebKozein.Data
             Random random = new Random();
             List<InformDataBase> dataBases = new List<InformDataBase>(count);
 
-            bool[] air = new bool[2] { true, false };
-
             for (int i = 0; i < count; i++)
             {
+                bool air = true;
+                if (i%2 == 0)
+                {
+                    air = false;
+                }
                 dataBases.Add(new InformDataBase
                 {
                     Id = i + 1,
@@ -38,7 +41,7 @@ namespace WebKozein.Data
                     Cost = random.Next(1, 100) * random.Next(1, 100),
                     Electricity = random.Next(1, 10000),
                     Water = random.Next(1, 1000),
-                    Air = air[random.Next(0, 1)],
+                    Air = air,
                     Power = random.Next(1, 10000),
                     PowerTime = random.Next(1, 1000),
                     Weight = 0

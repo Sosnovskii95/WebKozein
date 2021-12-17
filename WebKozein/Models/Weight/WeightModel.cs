@@ -22,6 +22,6 @@ namespace WebKozein.Models.Weight
         [Display(Name = "Лучший кретерий")]
         public double BestCriteria { get; set; }
 
-        public string NameBestCriteria { get; set; }
+        public string? NameBestCriteria { get; set; }
     }
 }

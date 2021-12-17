@@ -26,7 +26,7 @@ namespace WebKozein.Controllers
         public async Task<IActionResult> Index(SortState sortOrder, int? fCost, int? fElectricity, int? fPower, int? fPowerTime, bool? flagPareto, bool? flagHeararchy)
         {
             IQueryable<InformDataBase> dataBases = _context.InformDataBases;
-            bool flagFind = true;
+            bool flagSearch = true;
 
             if (fCost.HasValue)
             {
@@ -34,7 +34,7 @@ namespace WebKozein.Controllers
             }
             else
             {
-                flagFind = false;
+                flagSearch = false;
             }
             if (fElectricity.HasValue)
             {
@@ -42,15 +42,15 @@ namespace WebKozein.Controllers
             }
             else
             {
-                flagFind = false;
+                flagSearch = false;
             }
             if (fPower.HasValue)
             {
-                dataBases = dataBases.Where(fp => fp.Power <= fPower);
+                dataBases = dataBases.Where(fp => fp.Power >= fPower);
             }
             else
             {
-                flagFind = false;
+                flagSearch = false;
             }
             if (fPowerTime.HasValue)
             {
@@ -58,10 +58,10 @@ namespace WebKozein.Controllers
             }
             else
             {
-                flagFind = false;
+                flagSearch = false;
             }
 
-            ViewData["flagSearch"] = flagFind;
+            ViewData["flagSearch"] = flagSearch;
 
             if (flagPareto.HasValue)
             {
@@ -96,15 +96,53 @@ namespace WebKozein.Controllers
 
             List<InformDataBase> list;
 
-            if (GetList().Count > 0)
+            if (flagPareto.HasValue)
             {
-                list = GetList();
+                if (flagPareto.Value == true)
+                {
+                    list = GetList();
+                }
+                else
+                {
+                    list = await dataBases.AsNoTracking().ToListAsync();
+                    SetList(list);
+                }
+            }
+            else if (flagHeararchy.HasValue)
+            {
+                if (flagHeararchy.Value == true)
+                {
+                    list = GetList();
+                }
+                else
+                {
+                    list = await dataBases.AsNoTracking().ToListAsync();
+                    SetList(list);
+                }
             }
             else
             {
                 list = await dataBases.AsNoTracking().ToListAsync();
                 SetList(list);
             }
+
+            /*if (flagPareto.HasValue | flagHeararchy.HasValue)
+            {
+                if (flagPareto.Value == true | flagHeararchy.Value == true)
+                {
+                    list = GetList();
+                }
+                else
+                {
+                    list = await dataBases.AsNoTracking().ToListAsync();
+                    SetList(list);
+                }
+            }
+            else
+            {
+                list = await dataBases.AsNoTracking().ToListAsync();
+                SetList(list);
+            }*/
 
             IndexViewModel viewModel = new IndexViewModel
             {
@@ -248,7 +286,7 @@ namespace WebKozein.Controllers
             return RedirectToAction(nameof(Weight));
         }
 
-        public IActionResult Pareto(string? flagSearch,int? fCost, int? fElectricity, int? fPower, int? fPowerTime)
+        public IActionResult Pareto(string? flagSearch, int? fCost, int? fElectricity, int? fPower, int? fPowerTime)
         {
             bool flag = Convert.ToBoolean(flagSearch);
             if (flag)
@@ -262,12 +300,9 @@ namespace WebKozein.Controllers
                     SetList(list);
                 }
 
-                return RedirectToAction(nameof(Index), new { fCost = fCost, fElectricity = fElectricity, fPower = fPower, fPowerTime = fPowerTime, flagPareto = flag });
+
             }
-            else
-            {
-                return RedirectToAction(nameof(Index), new { fCost = fCost, fElectricity = fElectricity, fPower = fPower, fPowerTime = fPowerTime, flagPareto = flag });
-            }
+            return RedirectToAction(nameof(Index), new { fCost = fCost, fElectricity = fElectricity, fPower = fPower, fPowerTime = fPowerTime, flagPareto = flag });
         }
 
         public IActionResult Hierarchy(string? flagPareto, int? fCost, int? fElectricity, int? fPower, int? fPowerTime)
@@ -288,11 +323,11 @@ namespace WebKozein.Controllers
                     list = Hierarchy.GetInformDataBases();
                     SetList(list);
                 }
-                return RedirectToAction(nameof(Index), new { fCost = fCost, fElectricity = fElectricity, fPower = fPower, fPowerTime = fPowerTime, flagHeararchy = flag });
+                return RedirectToAction(nameof(Index), new { fCost = fCost, fElectricity = fElectricity, fPower = fPower, fPowerTime = fPowerTime, flagPareto = flag, flagHeararchy = flag });
             }
             else
             {
-                return RedirectToAction(nameof(Index), new { fCost = fCost, fElectricity = fElectricity, fPower = fPower, fPowerTime = fPowerTime, flagHeararchy = flag });
+                return RedirectToAction(nameof(Index), new { fCost = fCost, fElectricity = fElectricity, fPower = fPower, fPowerTime = fPowerTime, flagPareto = flag, flagHeararchy = flag });
             }
         }
 
