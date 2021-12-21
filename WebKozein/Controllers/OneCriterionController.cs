@@ -19,50 +19,55 @@ namespace WebKozein.Controllers
         {
             IQueryable<InformDataBase> dataBases = _context.InformDataBases;
 
-            if (fCost.HasValue)
+            if (GetFlags(fCost, fElectricity, fPower, fPowerTime))
             {
-                dataBases = dataBases.Where(fc => fc.Cost <= fCost);
-            }
-            if (fElectricity.HasValue)
-            {
-                dataBases = dataBases.Where(fe => fe.Electricity <= fElectricity);
-            }
-            if (fPower.HasValue)
-            {
-                dataBases = dataBases.Where(fp => fp.Power >= fPower);
-            }
-            if (fPowerTime.HasValue)
-            {
-                dataBases = dataBases.Where(fp => fp.PowerTime <= fPowerTime);
-            }
+                dataBases = dataBases.Where(fc => fc.Cost <= fCost).
+                    Where(fe => fe.Electricity <= fElectricity).
+                    Where(fp => fp.Power >= fPower).
+                    Where(fp => fp.PowerTime <= fPowerTime);
 
-            if (fRule)
-            {
-                dataBases = dataBases.OrderBy(s => s.Electricity);
+                if (fRule) { sortOrder = SortState.ElectricityAsc; }
             }
             else
             {
-                dataBases = sortOrder switch
+                if (fCost.HasValue)
                 {
-                    SortState.IdAsc => dataBases.OrderBy(s => s.Id),
-                    SortState.IdDesc => dataBases.OrderByDescending(s => s.Id),
-                    SortState.NameAsc => dataBases.OrderBy(s => s.Name),
-                    SortState.NameDesc => dataBases.OrderByDescending(s => s.Name),
-                    SortState.CostAsc => dataBases.OrderBy(s => s.Cost),
-                    SortState.CostDesc => dataBases.OrderByDescending(s => s.Cost),
-                    SortState.ElectricityAsc => dataBases.OrderBy(s => s.Electricity),
-                    SortState.ElectricityDesc => dataBases.OrderByDescending(s => s.Electricity),
-                    SortState.WaterAsc => dataBases.OrderBy(s => s.Water),
-                    SortState.WaterDesc => dataBases.OrderByDescending(s => s.Water),
-                    SortState.AirAsc => dataBases.OrderBy(s => s.Air),
-                    SortState.AirDesc => dataBases.OrderByDescending(s => s.Air),
-                    SortState.PowerAsc => dataBases.OrderBy(s => s.Power),
-                    SortState.PowerDesc => dataBases.OrderByDescending(s => s.Power),
-                    SortState.PowerTimeAsc => dataBases.OrderBy(s => s.PowerTime),
-                    SortState.PowerTimeDesc => dataBases.OrderByDescending(s => s.PowerTime),
-                    _ => dataBases
-                };
+                    dataBases = dataBases.Where(fc => fc.Cost <= fCost);
+                }
+                if (fElectricity.HasValue)
+                {
+                    dataBases = dataBases.Where(fe => fe.Electricity <= fElectricity);
+                }
+                if (fPower.HasValue)
+                {
+                    dataBases = dataBases.Where(fp => fp.Power >= fPower);
+                }
+                if (fPowerTime.HasValue)
+                {
+                    dataBases = dataBases.Where(fp => fp.PowerTime <= fPowerTime);
+                }
             }
+
+            dataBases = sortOrder switch
+            {
+                SortState.IdAsc => dataBases.OrderBy(s => s.Id),
+                SortState.IdDesc => dataBases.OrderByDescending(s => s.Id),
+                SortState.NameAsc => dataBases.OrderBy(s => s.Name),
+                SortState.NameDesc => dataBases.OrderByDescending(s => s.Name),
+                SortState.CostAsc => dataBases.OrderBy(s => s.Cost),
+                SortState.CostDesc => dataBases.OrderByDescending(s => s.Cost),
+                SortState.ElectricityAsc => dataBases.OrderBy(s => s.Electricity),
+                SortState.ElectricityDesc => dataBases.OrderByDescending(s => s.Electricity),
+                SortState.WaterAsc => dataBases.OrderBy(s => s.Water),
+                SortState.WaterDesc => dataBases.OrderByDescending(s => s.Water),
+                SortState.AirAsc => dataBases.OrderBy(s => s.Air),
+                SortState.AirDesc => dataBases.OrderByDescending(s => s.Air),
+                SortState.PowerAsc => dataBases.OrderBy(s => s.Power),
+                SortState.PowerDesc => dataBases.OrderByDescending(s => s.Power),
+                SortState.PowerTimeAsc => dataBases.OrderBy(s => s.PowerTime),
+                SortState.PowerTimeDesc => dataBases.OrderByDescending(s => s.PowerTime),
+                _ => dataBases
+            };
 
             IndexViewModel viewModel = new IndexViewModel
             {
@@ -72,6 +77,15 @@ namespace WebKozein.Controllers
             };
 
             return View(viewModel);
+        }
+
+        private bool GetFlags(int? cost, int? electricity, int? power, int? powerTime)
+        {
+            bool result = cost.HasValue ? true : false;
+            result = electricity.HasValue ? true : false;
+            result = power.HasValue ? true : false;
+            result = powerTime.HasValue ? true : false;
+            return result;
         }
 
         public IActionResult Create()

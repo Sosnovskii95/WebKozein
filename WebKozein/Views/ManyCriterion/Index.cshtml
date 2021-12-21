@@ -37,7 +37,8 @@
                    asp-route-fCost="@Model.FilterViewModel.SelectedCost"
                    asp-route-fElectricity="@Model.FilterViewModel.SelectedElectricity"
                    asp-route-fPower="@Model.FilterViewModel.SelectedPower"
-                   asp-route-fPowerTime="@Model.FilterViewModel.SelectedPowerTime" asp-route-flagSearch="@ViewData["flagSearch"]"
+                   asp-route-fPowerTime="@Model.FilterViewModel.SelectedPowerTime"
+                   asp-route-flagFilter="@ViewBag.FlagFilter"
                    role="button" class="btn btn-primary">
                     Метод Парето
                 </a>
@@ -49,7 +50,9 @@
                    asp-route-fCost="@Model.FilterViewModel.SelectedCost"
                    asp-route-fElectricity="@Model.FilterViewModel.SelectedElectricity"
                    asp-route-fPower="@Model.FilterViewModel.SelectedPower"
-                   asp-route-fPowerTime="@Model.FilterViewModel.SelectedPowerTime" asp-route-flagPareto="@ViewData["flagPareto"]"
+                   asp-route-fPowerTime="@Model.FilterViewModel.SelectedPowerTime"
+                   asp-route-flagFilter="@ViewBag.FlagFilter"
+                   asp-route-flagPareto="@ViewBag.FlagPareto"
                    role="button" class="btn btn-primary">
                     Метод иерархий
                 </a>
@@ -70,6 +73,8 @@
                         <input id="fElectricity" name="fElectricity" type="number" value="@Model.FilterViewModel.SelectedElectricity" placeholder="Электричество" />
                         <input id="fPower" name="fPower" type="number" value="@Model.FilterViewModel.SelectedPower" placeholder="Количество" />
                         <input id="fPowerTime" name="fPowerTime" type="number" value="@Model.FilterViewModel.SelectedPowerTime" placeholder="Время" />
+                        @Html.CheckBox("fRule", Model.FilterViewModel.SelectedRule)
+                        <label for="fRule">Условие</label>
                         <button class="btn btn-primary" type="submit">Фильтровать</button>
                         <button class="btn btn-danger" type="submit" onclick="resetSumbit()">Сброс</button>
                     </div>
@@ -222,13 +227,17 @@
 </div>
 
 
-@if (ViewBag.Weight == false)
+@if (ViewBag.FlagFilter == false)
 {
     <script type="text/javascript">alert("Не произведен отбор по условиям")</script>
 }
-@if (ViewBag.Pareto == false)
+@if (ViewBag.FlagPareto == false)
 {
     <script type="text/javascript">alert("Не произведен отбор методом Парето")</script>
+}
+@if(ViewBag.Weight == false)
+{
+      <script type="text/javascript">alert("Не произведен расчет Весов кретериев")</script>  
 }
 
 <script type="text/javascript">
