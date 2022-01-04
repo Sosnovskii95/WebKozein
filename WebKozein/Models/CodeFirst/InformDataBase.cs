@@ -10,7 +10,7 @@ namespace WebKozein.Models.CodeFirst
 
         [Display(Name = "Название")]
         [Required(ErrorMessage ="Название")]
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         [Display(Name = "Стоимость (руб)")]
         [Required(ErrorMessage ="Стоимость (руб)")]
