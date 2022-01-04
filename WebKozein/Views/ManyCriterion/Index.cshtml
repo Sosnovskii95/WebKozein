@@ -28,22 +28,17 @@
     <div class="row">
         <div class="col-md-auto">
             <div class="p-1">
-                <a asp-action="Weight" asp-route-sortOrder="@Model.SortViewModel.IdSort"
-                   asp-route-fCost="@Model.FilterViewModel.SelectedCost"
-                   asp-route-fElectricity="@Model.FilterViewModel.SelectedElectricity"
-                   asp-route-fPower="@Model.FilterViewModel.SelectedPower"
-                   asp-route-fPowerTime="@Model.FilterViewModel.SelectedPowerTime"
-                   role="button" class="btn btn-primary">Расчет весов</a>
+                <a asp-action="Weight" role="button" class="btn btn-primary">Расчет весов</a>
             </div>
         </div>
         <div class="col-md-auto">
             <div class="p-1">
-                <a asp-action="Index" asp-route-sortOrder="@Model.SortViewModel.IdSort"
+                <a asp-action="Pareto" asp-route-sortOrder="@Model.SortViewModel.IdSort"
                    asp-route-fCost="@Model.FilterViewModel.SelectedCost"
                    asp-route-fElectricity="@Model.FilterViewModel.SelectedElectricity"
                    asp-route-fPower="@Model.FilterViewModel.SelectedPower"
                    asp-route-fPowerTime="@Model.FilterViewModel.SelectedPowerTime"
-                   asp-route-Pareto="true"
+                   asp-route-flagFilter="@ViewBag.FlagFilter"
                    role="button" class="btn btn-primary">
                     Метод Парето
                 </a>
@@ -51,13 +46,13 @@
         </div>
         <div class="col-md-auto">
             <div class="p-1">
-                <a asp-action="Index" asp-route-sortOrder="@Model.SortViewModel.IdSort"
+                <a asp-action="Hierarchy" asp-route-sortOrder="@Model.SortViewModel.IdSort"
                    asp-route-fCost="@Model.FilterViewModel.SelectedCost"
                    asp-route-fElectricity="@Model.FilterViewModel.SelectedElectricity"
                    asp-route-fPower="@Model.FilterViewModel.SelectedPower"
                    asp-route-fPowerTime="@Model.FilterViewModel.SelectedPowerTime"
-                   asp-route-Pareto="true"
-                   asp-route-Hierarchy="true"
+                   asp-route-flagFilter="@ViewBag.FlagFilter"
+                   asp-route-flagPareto="@ViewBag.FlagPareto"
                    role="button" class="btn btn-primary">
                     Метод иерархий
                 </a>

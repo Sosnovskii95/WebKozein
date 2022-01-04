@@ -1,28 +1,7 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Главная";
 }
 
-<div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="col-md-auto">
-            <div class="p-1">
-                <label>Многокритериальная оптимизация при проектировании участка производства пищевого казеина</label>
-            </div>
-        </div>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-md-auto">
-            <div class="p-1">
-                <a asp-action="Index" asp-controller="OneCriterion" role="button" class="btn btn-primary">Однокритериальное решение</a>
-                <a asp-action="Index" asp-controller="ManyCriterion" role="button" class="btn btn-primary">Многокритериальное решение</a>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-auto">
-            <div class="p-1">
-                
-            </div>
-        </div>
-    </div>
-</div>
+@Html.ActionLink("Однокритериальное решение", "Index", "OneCriterion")
+@Html.ActionLink("Многокритериальное решение", "Index", "ManyCriterion")

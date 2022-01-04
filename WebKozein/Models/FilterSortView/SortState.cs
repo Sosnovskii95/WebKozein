@@ -17,8 +17,6 @@
         PowerAsc,
         PowerDesc,
         PowerTimeAsc,
-        PowerTimeDesc,
-        WeightAsc,
-        WeightDesc
+        PowerTimeDesc
     }
 }
