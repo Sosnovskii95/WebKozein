@@ -12,7 +12,7 @@ namespace WebKozein.Models.CodeFirst
         [Required(ErrorMessage ="Название")]
         public string Name { get; set; }
 
-        [Display(Name = "Стоимость (руб)")]
+        [Display(Name = "Стоимость (мил. руб)")]
         [Required(ErrorMessage ="Стоимость (руб)")]
         [Range(0, int.MaxValue, ErrorMessage = "Не может быть отрицательным")]
         public int Cost { get; set; }
@@ -42,6 +42,6 @@ namespace WebKozein.Models.CodeFirst
         public int PowerTime { get; set; }
 
         [Display(Name = "Вес в %")]
-        public double Weight { get; set; }
+        public int Weight { get; set; }
     }
 }

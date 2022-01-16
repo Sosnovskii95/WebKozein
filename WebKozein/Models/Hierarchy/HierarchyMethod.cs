@@ -70,7 +70,7 @@ namespace WebKozein.Models.Hierarchy
 
                 for (int i = 0; i < _informsList.Count; i++)
                 {
-                    _informsList[i].Weight = Math.Round(weightAlternativs[i], 2) * 100;
+                    _informsList[i].Weight = Convert.ToInt32(Math.Round(weightAlternativs[i], 2) * 100);
                 }
             }
         }

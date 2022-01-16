@@ -38,12 +38,12 @@ namespace WebKozein.Data
                 {
                     Id = i + 1,
                     Name = "Линия " + (i + 1).ToString(),
-                    Cost = random.Next(1, 100) * random.Next(1, 100),
-                    Electricity = random.Next(1, 10000),
-                    Water = random.Next(1, 1000),
+                    Cost = random.Next(100, 600),
+                    Electricity = random.Next(50, 250),
+                    Water = random.Next(100, 1000),
                     Air = air,
-                    Power = random.Next(1, 10000),
-                    PowerTime = random.Next(1, 1000),
+                    Power = random.Next(500, 1000),
+                    PowerTime = random.Next(50, 250),
                     Weight = 0
                 });
             }
